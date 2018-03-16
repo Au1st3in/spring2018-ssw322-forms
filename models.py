@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker#, relationship
 from sqlalchemy import create_engine, Column, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 
-DEBUG = False
+DEBUG = True
 DATABASE = 'db.sqlite3'
 PREFIXES = {'U': 'User', 'T': 'Test', 'S': 'Survey', 'Q': 'Question', 'A': 'Answer'}
 Base = declarative_base()

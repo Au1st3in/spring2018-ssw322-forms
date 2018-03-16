@@ -5,7 +5,9 @@ Created on Mar 10, 2018
 '''
 
 import models
-from question import question
+import question
+from question import question as q
+from answer import answer as a
 
 class form:
     def __init__(self, userID, formID):
@@ -14,10 +16,32 @@ class form:
         self.isTest = formID[:1].upper() == 'T'
         if formID in {'S','T'} or not self.get():
             self.isOwner = True
+            self.ownerID = self.userID
             self.questions = []
             self.userAnswers = {}
             self.correctAnswers = []
-            self.put(models.generateUUID(formID[:1]), self.userID, self.questions, self.userAnswers, self.correctAnswer)
+            self.put()
+    
+    def get_questions(self):
+        Qs = []
+        for qID in self.questions:
+            Qs.append(q(qID))
+        return Qs
+    
+    def get_userAnswers(self):
+        uA = {}
+        for uID in self.userAnswers.keys():
+            As, answers = [], self.userAnswers[uID]
+            for aID in answers:
+                As.append(a(aID))
+            uA[uID] = As
+        return uA
+    
+    def get_correctAnswers(self):
+        cA = []
+        for aID in self.correctAnswers:
+            cA.append(a(aID))
+        return cA
     
     def get(self):
         if self.formID in models.query(models.Forms.id):
@@ -40,7 +64,7 @@ class form:
             query.userAnswers = str(self.userAnswers)
             query.correctAnswers = str(self.correctAnswers)
         else:
-            session.add(models.Forms(id=self.formID, ownerID=self.ownerID, questions=str(self.questions), userAnswer=str(self.userAnswers), correctAnswers=str(self.correctAnswers)))
+            session.add(models.Forms(id=models.generateUUID(self.formID[:1]), ownerID=self.ownerID, questions=str(self.questions), userAnswers=str(self.userAnswers), correctAnswers=str(self.correctAnswers)))
         session.commit()
         session.close()
         return True
@@ -66,12 +90,21 @@ class form:
         session.close()
         return True
         
-    
-    def question(self, questionType, q=None, a=None, choices=None, order=None):        
+    def addQuestion(self, questionType, question=None, choices=None, order=None):        
         if self.isOwner:
-            '''q1 = question(questionType, q, choices, order)
-            if self.isTest:
-                a1 = answer(questionType, a)
-                self.correctAnswers.append(a1)
-            self.questions.append(q1)'''
+            qN = q(models.generateUUID('q'), questionType, question, choices, order)
+        self.questions.append(qN.questionID)
+        self.put()
+        return qN.questionID
+        
+    def addAnswer(self, questionID, answer=None, order=None):
+        if answer:
+            aN = a(models.generateUUID('a'), self.userID, questionID, answer)
+        else:
+            aN = a(models.generateUUID('a'), self.userID, questionID, order)
+        if self.isOwner:
+            self.correctAnswers.append(aN.answerID)
+        else:
+            self.userAnswers.append(aN.answerID)
+        return aN.answerID
         
