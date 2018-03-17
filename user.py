@@ -18,7 +18,7 @@ class user:
     
     def get(self):
         if self.userID in models.query(models.Users.id):
-            self.forms = models.query(models.Users, str(self.UserID)).get_forms()
+            self.forms = models.query(models.Users, str(self.userID)).get_forms()
             return True
         return False
     

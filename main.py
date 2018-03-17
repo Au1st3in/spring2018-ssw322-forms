@@ -20,11 +20,15 @@ def create(userID, formID):
     
     while(not done):
         qChoice, question, answer, choice, order = 0, None, None, None, None
-        while(qChoice not in range(1, len(questionTypes)+1)):
-            print("Select a question type to create (Enter Anything Else to Quit): ")
+        while(qChoice not in range(1, len(questionTypes)+2)):
+            print("\nSelect a question type to create (Enter Anything Else to Quit): ")
             for i in range(1, len(questionTypes)+1):
                     print(str(i)+". "+str(questionTypes[i-1]))
-            qChoice = int(input())
+            print('7. Quit')
+            try:
+                qChoice = int(input())
+            except:
+                qChoice = 7
                 
         if(qChoice in {1,2}):
             question = input(questionTypes[qChoice-1]+" Question: ")
@@ -43,7 +47,7 @@ def create(userID, formID):
                     del choice[-1]
                 else:
                     count += 1
-                    
+
             if(f.isTest):
                 answerChoice = False
                 while(not answerChoice):
@@ -68,13 +72,13 @@ def create(userID, formID):
                     t2.append(input(questionTypes[qChoice-1]+" Matchee #"+str(count)+" for "+t1[i]+": "))
                 else:
                     t2.append(input(questionTypes[qChoice-1]+" Matchee #"+str(count)+": "))
-            if(f.test):
+            if(f.isTest):
                 answer = tuple(tuple(t1), tuple(t2))
             order = tuple(tuple(shuffle(t1)), tuple(shuffle(t2)))
         elif(qChoice == 6):
             doneRank, count, r = False, 1, []
             while(not doneRank):
-                if(f.test):
+                if(f.isTest):
                     r.append(input(questionTypes[qChoice-1]+" Rank #"+str(count)+" (Input DONE when finished): "))
                 else:
                     r.append(input(questionTypes[qChoice-1]+" Rankee #"+str(count)+" (Input DONE when finished): "))
@@ -84,7 +88,7 @@ def create(userID, formID):
                 else:
                     count += 1
 
-            if(f.test):
+            if(f.isTest):
                 answer = tuple(r)
             order = tuple(shuffle(r))
         else:
@@ -92,7 +96,7 @@ def create(userID, formID):
         
         if(not done):
             qID = f.addQuestion(questionTypes[qChoice-1], question, choice, order)
-            if(f.test):
+            if(f.isTest):
                 f.addAnswer(qID, answer, order)
     display(userID, f.formID)
 
@@ -115,12 +119,12 @@ if __name__ == "__main__":
             logged_in = True
             sChoice = '0'
         if(logged_in):
-            while(sChoice not in {'1','2','LOGOUT'}):
-                print("Select display or create form: \n1. Display\n2. Create\n\nLOGOUT")
+            while(sChoice not in {'1','2', '3', 'LOGOUT'}):
+                print("\nSelect display or create form: \n1. Display\n2. Create\n3. Logout")
                 sChoice = input()
             if(sChoice == '1'):
                 if(len(u.forms) == 0):
-                    print("NO FORMS TO Display")
+                    print("\nNO FORMS TO Display")
                     sChoice = '0'
                 else:
                     dChoice = 0
@@ -137,6 +141,7 @@ if __name__ == "__main__":
                     print("Select form type to create: \n1. Survey\n2. Test")
                     cChoice = int(input())
                 create(u.userID, formType[cChoice])
-            elif(sChoice.upper() == 'LOGOUT'):
+                sChoice = '1'
+            elif(sChoice.upper() == 'LOGOUT' or sChoice == '3'):
                 logged_in = False
                 u.put()

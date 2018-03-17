@@ -5,7 +5,6 @@ Created on Mar 10, 2018
 '''
 
 import models
-import question
 from question import question as q
 from answer import answer as a
 

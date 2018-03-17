@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker#, relationship
 from sqlalchemy import create_engine, Column, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 
-DEBUG = True
+DEBUG = False
 DATABASE = 'db.sqlite3'
 PREFIXES = {'U': 'User', 'T': 'Test', 'S': 'Survey', 'Q': 'Question', 'A': 'Answer'}
 Base = declarative_base()
@@ -18,7 +18,7 @@ class Users(Base):
     __tablename__ = "Users"
     
     id = Column('id', String, primary_key=True, unique=True)
-    forms = Column('forms', String, unique=True)
+    forms = Column('forms', String)
     
     def get_id(self):
         return str(self.id)
@@ -34,9 +34,9 @@ class Forms(Base):
     
     id = Column('id', String, primary_key=True, unique=True)
     ownerID = Column('ownerID', String, ForeignKey('Users.id'))
-    questions = Column('questions', String, unique=True)
-    userAnswers = Column('userAnswers', String, unique=True)
-    correctAnswers = Column('correctAnswers', String, unique=True)
+    questions = Column('questions', String)
+    userAnswers = Column('userAnswers', String)
+    correctAnswers = Column('correctAnswers', String)
  
     def get_id(self):
         return str(self.id)
@@ -127,13 +127,21 @@ def generateUUID(prefix=''):
     return str(uuid.uuid4().int)
 
 def query(model, identity=None):
-    session = Session()
+    result, session = [], Session()
     if identity:
         query = session.query(model).filter(model.id == str(identity)).one()
     else:
         query = session.query(model).all()
     session.close()
-    return query
+    if isinstance(query, list):
+        for q in query:
+            if isinstance(q, tuple):
+                result.append(q[0])
+            else:
+                result.append(q)
+        return result
+    else:
+        return query
 
 '''
 def add(model):

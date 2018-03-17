@@ -5,7 +5,7 @@ Created on Mar 10, 2018
 '''
 
 import models
-from random import shuffle
+#from random import shuffle
 
 questionTypes = ['shortAnswer', 'essay', 'trueFalse', 'multipleChoice', 'matching', 'ranking']
 
