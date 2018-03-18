@@ -24,7 +24,7 @@ def create(userID, formID):
             print("\nSelect a question type to create (Enter Anything Else to Quit): ")
             for i in range(1, len(questionTypes)+1):
                     print(str(i)+". "+str(questionTypes[i-1]))
-            print('7. Quit')
+            print('7. EXIT')
             try:
                 qChoice = int(input())
             except:
