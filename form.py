@@ -97,7 +97,7 @@ class form:
         return qN.questionID
         
     def addAnswer(self, questionID, answer=None, order=None):
-        print(models.generateUUID('a')+" "+self.userID+" "+questionID+" "+order)
+        #print(models.generateUUID('a')+" "+self.userID+" "+questionID+" "+order)
         if answer:
             aN = a(models.generateUUID('a'), self.userID, questionID, answer)
         else:
