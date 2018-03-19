@@ -18,6 +18,7 @@ class question:
                 self.questionType = str(qT)
                 self.question = str(q)
                 self.choices, self.order = c, o
+                self.put()
             else:
                 raise ValueError()
         return
