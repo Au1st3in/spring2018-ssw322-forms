@@ -4,13 +4,50 @@ Created on Mar 10, 2018
 @author: arocha
 '''
 
-import models
+import models, ast
 from user import user
 from form import form
 from question import questionTypes
+from question import question as q
+from answer import answer as a
 
 def display(userID, formID):
     f = form(userID, formID)
+    isTest = f.isTest
+    for ID in f.questions:
+        q = q(ID)
+        qtype = questionTypes.index(q.questionType)
+        if isTest:
+            a = a(f.correctAnswers[f.questions.index(ID)], userID)
+        if qtype == 0:
+            print("Question #"+str(f.questions.index(ID)+1)+":\n"+q.questionType+"\n\t"+q.question+"\n")
+            if isTest:
+                print("Answer: "+a.answer+"\n")
+        elif qtype == 1:
+            print("Question #"+str(f.questions.index(ID)+1)+":\n"+q.questionType+"\n\t"+q.question+"\n")
+            if isTest:
+                print("")
+        elif qtype == 2:
+            print("Question #"+str(f.questions.index(ID)+1)+":\n"+q.questionType+"\n\t"+q.question+"\n")
+            cs=ast.literal_eval(q.choices)
+            for c in cs:
+                print(str(cs.index(c)+1)+". "+str(c)+"\n")
+            if isTest:
+                print("Answer: "+a.answer+"\n")
+        elif qtype == 3:
+            print("Question #"+str(f.questions.index(ID)+1)+":\n"+q.questionType+"\n\t"+q.question+"\n")
+            if isTest:
+                print("Answer: "+a.answer+"\n")
+        elif qtype == 4:
+            print("Question #"+str(f.questions.index(ID)+1)+":\n"+q.questionType+"\n\t"+q.question+"\n")
+            m = ast.literal_eval(a.answer)
+            for i in range(0, len(m[0])):
+                print("\t"+str(m[0][i])+"\t"+str(m[1][i])+"\n")
+        elif qtype == 5:
+            print("Question #"+str(f.questions.index(ID)+1)+":\n"+q.questionType+"\n\t"+q.question+"\n")
+            r = ast.literal_eval(a.answer)
+            for i in range(0, len(r)):
+                print("\t"+str(i)+". "+str(r[i])+"\n")
     return
 
 def create(userID, formID):
@@ -42,6 +79,7 @@ def create(userID, formID):
                 answer = str(bool(answer-1))
         elif(qChoice == 4):
             doneChoice, count, choice = False, 1, []
+            question = input(questionTypes[qChoice-1]+" Question: ")
             while(not doneChoice):
                 if(len(choice) >= 1):
                     choice.append(input(questionTypes[qChoice-1]+" Choice #"+str(count)+" (Input DONE when finished): "))
@@ -64,6 +102,7 @@ def create(userID, formID):
                         answerChoice = True
         elif(qChoice == 5):
             doneMatch, count, t1, t2 = False, 1, [], []
+            question = "Match the following: "
             print("Input Matchers first, then Matchees")
             while(not doneMatch):
                 if(len(t1) >= 1):
@@ -85,6 +124,7 @@ def create(userID, formID):
             order = (t1, t2)
         elif(qChoice == 6):
             doneRank, count, r = False, 1, []
+            question = "Rank the following in order: "
             while(not doneRank):
                 if(len(r) >= 1):
                     if(f.isTest):
@@ -113,6 +153,7 @@ def create(userID, formID):
             if(f.isTest):
                 f.addAnswer(qID, str(answer), str(order))
     display(userID, f.formID)
+    return
 
 if __name__ == "__main__":
     logged_in = False

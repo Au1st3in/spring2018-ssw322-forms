@@ -11,7 +11,7 @@ questionTypes = ['shortAnswer', 'essay', 'trueFalse', 'multipleChoice', 'matchin
 
 class question:
     
-    def __init__(self, questionID, qT, q, c, o):
+    def __init__(self, questionID, qT=None, q=None, c=None, o=None):
         self.questionID = questionID
         if not self.get():
             if(qT in questionTypes):
