@@ -13,7 +13,8 @@ class form:
         self.userID = userID
         self.formID = formID
         self.isTest = formID[:1].upper() == 'T'
-        if formID in {'S','T'} or not self.get():
+        if (formID in {'S','T'}) or (self.get()):
+            self.formID = models.generateUUID(formID[0])
             self.isOwner = True
             self.ownerID = self.userID
             self.questions = []

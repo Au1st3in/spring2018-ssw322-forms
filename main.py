@@ -8,44 +8,42 @@ import models, ast
 from user import user
 from form import form
 from question import questionTypes
-from question import question as q
-from answer import answer as a
 
 def display(userID, formID):
-    f = form(userID, formID)
-    isTest = f.isTest
-    for ID in f.questions:
-        q = q(ID)
-        qtype = questionTypes.index(q.questionType)
+    f = models.query(models.Forms, formID)    
+    isTest = f.get_id()[0].upper() == 'T'
+    for questionID in f.get_questions():
+        q = models.query(models.Questions, questionID)
+        qtype = questionTypes.index(q.get_questionType())
         if isTest:
-            a = a(f.correctAnswers[f.questions.index(ID)], userID)
+            a = models.query(models.Answers, f.correctAnswers[f.get_questions().index(questionID)])
         if qtype == 0:
-            print("Question #"+str(f.questions.index(ID)+1)+":\n"+q.questionType+"\n\t"+q.question+"\n")
+            print("Question #"+str(f.get_questions().index(questionID)+1)+":\n"+q.get_questionType()+"\n\t"+q.get_question()+"\n")
             if isTest:
-                print("Answer: "+a.answer+"\n")
+                print("Answer: "+a.get_answer()+"\n")
         elif qtype == 1:
-            print("Question #"+str(f.questions.index(ID)+1)+":\n"+q.questionType+"\n\t"+q.question+"\n")
+            print("Question #"+str(f.get_questions().index(questionID)+1)+":\n"+q.get_questionType()+"\n\t"+q.get_question()+"\n")
             if isTest:
                 print("")
         elif qtype == 2:
-            print("Question #"+str(f.questions.index(ID)+1)+":\n"+q.questionType+"\n\t"+q.question+"\n")
+            print("Question #"+str(f.get_questions().index(questionID)+1)+":\n"+q.get_questionType()+"\n\t"+q.get_question()+"\n")
             cs=ast.literal_eval(q.choices)
             for c in cs:
                 print(str(cs.index(c)+1)+". "+str(c)+"\n")
             if isTest:
-                print("Answer: "+a.answer+"\n")
+                print("Answer: "+a.get_answer()+"\n")
         elif qtype == 3:
-            print("Question #"+str(f.questions.index(ID)+1)+":\n"+q.questionType+"\n\t"+q.question+"\n")
+            print("Question #"+str(f.get_questions().index(questionID)+1)+":\n"+q.get_questionType()+"\n\t"+q.get_question()+"\n")
             if isTest:
-                print("Answer: "+a.answer+"\n")
+                print("Answer: "+a.get_answer()+"\n")
         elif qtype == 4:
-            print("Question #"+str(f.questions.index(ID)+1)+":\n"+q.questionType+"\n\t"+q.question+"\n")
-            m = ast.literal_eval(a.answer)
+            print("Question #"+str(f.get_questions().index(questionID)+1)+":\n"+q.get_questionType()+"\n\t"+q.get_question()+"\n")
+            m = a.get_answer()
             for i in range(0, len(m[0])):
                 print("\t"+str(m[0][i])+"\t"+str(m[1][i])+"\n")
         elif qtype == 5:
-            print("Question #"+str(f.questions.index(ID)+1)+":\n"+q.questionType+"\n\t"+q.question+"\n")
-            r = ast.literal_eval(a.answer)
+            print("Question #"+str(f.get_questions().index(questionID)+1)+":\n"+q.get_questionType()+"\n\t"+q.get_question()+"\n")
+            r = a.get_answer()
             for i in range(0, len(r)):
                 print("\t"+str(i)+". "+str(r[i])+"\n")
     return
@@ -152,8 +150,7 @@ def create(userID, formID):
             qID = f.addQuestion(questionTypes[qChoice-1], question, choice, order)
             if(f.isTest):
                 f.addAnswer(qID, str(answer), str(order))
-    display(userID, f.formID)
-    return
+    return f.formID
 
 if __name__ == "__main__":
     logged_in = False
@@ -173,6 +170,7 @@ if __name__ == "__main__":
             logged_in = True
             sChoice = '0'
         if(logged_in):
+            #u = user(users[uChoice-1].get_id())
             while(sChoice not in {'1','2', '3', 'LOGOUT'}):
                 print("\nSelect display or create form: \n1. Display\n2. Create\n3. Logout")
                 sChoice = input()
@@ -195,7 +193,7 @@ if __name__ == "__main__":
                 while(cChoice not in {1,2}):
                     print("Select form type to create: \n1. Survey\n2. Test")
                     cChoice = int(input())
-                create(u.userID, formType[cChoice])
+                u.forms.append(create(u.userID, formType[cChoice]))
                 sChoice = '0'
             elif(sChoice.upper() == 'LOGOUT' or sChoice == '3'):
                 logged_in = False
