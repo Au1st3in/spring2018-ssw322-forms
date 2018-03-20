@@ -65,7 +65,6 @@ class form:
                 query.userAnswers = str(self.userAnswers)
                 query.correctAnswers = str(self.correctAnswers)
             else:
-                print("SHIT")
                 session.add(models.Forms(id=models.generateUUID(self.formID[:1]), ownerID=self.ownerID, questions=str(self.questions), userAnswers=str(self.userAnswers), correctAnswers=str(self.correctAnswers)))
             session.commit()
             session.close()
