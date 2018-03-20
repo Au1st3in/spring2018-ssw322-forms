@@ -57,17 +57,20 @@ class form:
         return False
     
     def put(self):
-        session = models.Session()
-        if self.formID in models.query(models.Forms.id):
-            query = session.query(models.Forms).filter(models.Forms.id == str(self.formID)).first()
-            query.questions = str(self.questions)
-            query.userAnswers = str(self.userAnswers)
-            query.correctAnswers = str(self.correctAnswers)
-        else:
-            session.add(models.Forms(id=models.generateUUID(self.formID[:1]), ownerID=self.ownerID, questions=str(self.questions), userAnswers=str(self.userAnswers), correctAnswers=str(self.correctAnswers)))
-        session.commit()
-        session.close()
-        return True
+        if self.questions:
+            session = models.Session()
+            if self.formID in models.query(models.Forms.id):
+                query = session.query(models.Forms).filter(models.Forms.id == str(self.formID)).first()
+                query.questions = str(self.questions)
+                query.userAnswers = str(self.userAnswers)
+                query.correctAnswers = str(self.correctAnswers)
+            else:
+                print("SHIT")
+                session.add(models.Forms(id=models.generateUUID(self.formID[:1]), ownerID=self.ownerID, questions=str(self.questions), userAnswers=str(self.userAnswers), correctAnswers=str(self.correctAnswers)))
+            session.commit()
+            session.close()
+            return True
+        return False
     
     def remove(self):
         session = models.Session()
@@ -94,7 +97,6 @@ class form:
         if self.isOwner:
             qN = q(models.generateUUID('q'), questionType, question, choices, order)
         self.questions.append(qN.questionID)
-        self.put()
         return qN.questionID
         
     def addAnswer(self, questionID, answer=None, order=None):

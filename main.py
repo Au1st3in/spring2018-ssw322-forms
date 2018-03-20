@@ -4,7 +4,7 @@ Created on Mar 10, 2018
 @author: arocha
 '''
 
-import models, ast
+import models
 from user import user
 from form import form
 from question import questionTypes
@@ -13,29 +13,29 @@ def display(userID, formID):
     f = models.query(models.Forms, formID)    
     isTest = f.get_id()[0].upper() == 'T'
     for questionID in f.get_questions():
+        if isTest:
+            a = models.query(models.Answers, f.get_correctAnswers()[f.get_questions().index(questionID)])
         q = models.query(models.Questions, questionID)
         qtype = questionTypes.index(q.get_questionType())
-        if isTest:
-            a = models.query(models.Answers, f.correctAnswers[f.get_questions().index(questionID)])
         if qtype == 0:
             print("Question #"+str(f.get_questions().index(questionID)+1)+":\n"+q.get_questionType()+"\n\t"+q.get_question()+"\n")
             if isTest:
-                print("Answer: "+a.get_answer()+"\n")
+                print("Answer: "+str(a.get_answer())+"\n")
         elif qtype == 1:
             print("Question #"+str(f.get_questions().index(questionID)+1)+":\n"+q.get_questionType()+"\n\t"+q.get_question()+"\n")
             if isTest:
                 print("")
         elif qtype == 2:
             print("Question #"+str(f.get_questions().index(questionID)+1)+":\n"+q.get_questionType()+"\n\t"+q.get_question()+"\n")
-            cs=ast.literal_eval(q.choices)
-            for c in cs:
-                print(str(cs.index(c)+1)+". "+str(c)+"\n")
             if isTest:
-                print("Answer: "+a.get_answer()+"\n")
+                print("Answer: "+str(a.get_answer())+"\n")
         elif qtype == 3:
             print("Question #"+str(f.get_questions().index(questionID)+1)+":\n"+q.get_questionType()+"\n\t"+q.get_question()+"\n")
+            cs = q.get_choices()
+            for c in cs:
+                print("\t"+str(cs.index(c)+1)+". "+str(c)+"\n")
             if isTest:
-                print("Answer: "+a.get_answer()+"\n")
+                print("Answer: "+str(a.get_answer())+"\n")
         elif qtype == 4:
             print("Question #"+str(f.get_questions().index(questionID)+1)+":\n"+q.get_questionType()+"\n\t"+q.get_question()+"\n")
             m = a.get_answer()
@@ -51,7 +51,7 @@ def display(userID, formID):
 def create(userID, formID):
     done = False
     f = form(userID, formID)
-    
+    formID = f.formID
     while(not done):
         qChoice, question, answer, choice, order = 0, None, None, None, None
         while(qChoice not in range(1, len(questionTypes)+2)):
@@ -76,8 +76,8 @@ def create(userID, formID):
                     answer = int(input())
                 answer = str(bool(answer-1))
         elif(qChoice == 4):
-            doneChoice, count, choice = False, 1, []
             question = input(questionTypes[qChoice-1]+" Question: ")
+            doneChoice, count, choice = False, 1, []
             while(not doneChoice):
                 if(len(choice) >= 1):
                     choice.append(input(questionTypes[qChoice-1]+" Choice #"+str(count)+" (Input DONE when finished): "))
@@ -150,6 +150,7 @@ def create(userID, formID):
             qID = f.addQuestion(questionTypes[qChoice-1], question, choice, order)
             if(f.isTest):
                 f.addAnswer(qID, str(answer), str(order))
+    f.put()
     return f.formID
 
 if __name__ == "__main__":
@@ -170,7 +171,6 @@ if __name__ == "__main__":
             logged_in = True
             sChoice = '0'
         if(logged_in):
-            #u = user(users[uChoice-1].get_id())
             while(sChoice not in {'1','2', '3', 'LOGOUT'}):
                 print("\nSelect display or create form: \n1. Display\n2. Create\n3. Logout")
                 sChoice = input()
@@ -193,7 +193,8 @@ if __name__ == "__main__":
                 while(cChoice not in {1,2}):
                     print("Select form type to create: \n1. Survey\n2. Test")
                     cChoice = int(input())
-                u.forms.append(create(u.userID, formType[cChoice]))
+                create(u.userID, formType[cChoice])
+                #u.forms.append(create(u.userID, formType[cChoice]))
                 sChoice = '0'
             elif(sChoice.upper() == 'LOGOUT' or sChoice == '3'):
                 logged_in = False
