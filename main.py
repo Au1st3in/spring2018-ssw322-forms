@@ -39,13 +39,18 @@ def display(userID, formID):
         elif qtype == 4:
             print("Question #"+str(f.get_questions().index(questionID)+1)+":\n"+q.get_questionType()+"\n\t"+q.get_question()+"\n")
             m = a.get_answer()
-            for i in range(0, len(m[0])):
-                print("\t"+str(m[0][i])+"\t"+str(m[1][i])+"\n")
+            if len(m) == 2 and type(m[0]) == list and type(m[1]) == list:
+                for i in range(0, len(m[0])):
+                    print("\t"+str(m[0][i])+"\t"+str(m[1][i])+"\n")
+            else:
+                for i in range(0, len(m)):
+                    print("\t"+str(i)+". "+str(m[i])+"\n")
         elif qtype == 5:
             print("Question #"+str(f.get_questions().index(questionID)+1)+":\n"+q.get_questionType()+"\n\t"+q.get_question()+"\n")
             r = a.get_answer()
             for i in range(0, len(r)):
                 print("\t"+str(i)+". "+str(r[i])+"\n")
+            
     return
 
 def create(userID, formID):
@@ -103,7 +108,7 @@ def create(userID, formID):
             question = "Match the following: "
             print("Input Matchers first, then Matchees")
             while(not doneMatch):
-                if(len(t1) >= 1):
+                if(len(t1) >= 1 and len(t1)%2==0):
                     t1.append(input(questionTypes[qChoice-1]+" Matcher #"+str(count)+" (Input DONE when finished): "))
                 else:
                     t1.append(input(questionTypes[qChoice-1]+" Matcher #"+str(count)+": "))
