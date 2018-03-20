@@ -13,10 +13,10 @@ def display(userID, formID):
     f = models.query(models.Forms, formID)    
     isTest = f.get_id()[0].upper() == 'T'
     for questionID in f.get_questions():
-        if isTest:
-            a = models.query(models.Answers, f.get_correctAnswers()[f.get_questions().index(questionID)])
         q = models.query(models.Questions, questionID)
         qtype = questionTypes.index(q.get_questionType())
+        if isTest:
+            a = models.query(models.Answers, f.get_correctAnswers()[f.get_questions().index(questionID)])
         if qtype == 0:
             print("Question #"+str(f.get_questions().index(questionID)+1)+":\n"+q.get_questionType()+"\n\t"+q.get_question()+"\n")
             if isTest:
@@ -38,18 +38,24 @@ def display(userID, formID):
                 print("Answer: "+str(a.get_answer())+"\n")
         elif qtype == 4:
             print("Question #"+str(f.get_questions().index(questionID)+1)+":\n"+q.get_questionType()+"\n\t"+q.get_question()+"\n")
-            m = a.get_answer()
-            if len(m) == 2 and type(m[0]) == list and type(m[1]) == list:
+            o = q.get_order()
+            for i in range(0, len(o[0])):
+                    print("\t"+str(o[0][i])+"\t"+str(o[1][i])+"\n")
+            if isTest:
+                m = a.get_answer()
+                print("Answer:\n")
                 for i in range(0, len(m[0])):
                     print("\t"+str(m[0][i])+"\t"+str(m[1][i])+"\n")
-            else:
-                for i in range(0, len(m)):
-                    print("\t"+str(i)+". "+str(m[i])+"\n")
         elif qtype == 5:
             print("Question #"+str(f.get_questions().index(questionID)+1)+":\n"+q.get_questionType()+"\n\t"+q.get_question()+"\n")
-            r = a.get_answer()
-            for i in range(0, len(r)):
-                print("\t"+str(i)+". "+str(r[i])+"\n")
+            o = q.get_order()
+            for i in range(0, len(o)):
+                    print("\t"+str(i)+". "+str(o[i])+"\n")
+            if isTest:
+                r = a.get_answer()
+                print("Answer:\n")
+                for i in range(0, len(r)):
+                    print("\t"+str(i)+". "+str(r[i])+"\n")
             
     return
 
