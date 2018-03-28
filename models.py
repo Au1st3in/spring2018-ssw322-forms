@@ -105,14 +105,11 @@ class Answers(Base):
         return str(self.questionID)
     
     def get_answer(self):
-        if str(self.answer).title() in {'True', 'False'}:
-            return bool(self.answer)
-        elif '[' in str(self.answer):
-            try:
-                a = ast.literal_eval(self.answer)
-            except:
-                a = str(self.answer)
-        return a
+        try:
+            return ast.literal_eval(self.answer)
+        except:
+            return str(self.answer)
+
     
     #def __str__(self):
     #    return "["+str(self.id)+", "+str(self.questionType)+", "+str(self.answer)+"]"

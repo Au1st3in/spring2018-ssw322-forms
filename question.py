@@ -11,13 +11,14 @@ questionTypes = ['shortAnswer', 'essay', 'trueFalse', 'multipleChoice', 'matchin
 
 class question:
     
-    def __init__(self, questionID, qT, q, c, o):
+    def __init__(self, questionID, qT=None, q=None, c=None, o=None):
         self.questionID = questionID
         if not self.get():
             if(qT in questionTypes):
                 self.questionType = str(qT)
                 self.question = str(q)
                 self.choices, self.order = c, o
+                self.put()
             else:
                 raise ValueError()
         return

@@ -13,7 +13,8 @@ class form:
         self.userID = userID
         self.formID = formID
         self.isTest = formID[:1].upper() == 'T'
-        if formID in {'S','T'} or not self.get():
+        if (formID in {'S','T'}) or (self.get()):
+            self.formID = models.generateUUID(formID[0])
             self.isOwner = True
             self.ownerID = self.userID
             self.questions = []
@@ -56,17 +57,19 @@ class form:
         return False
     
     def put(self):
-        session = models.Session()
-        if self.formID in models.query(models.Forms.id):
-            query = session.query(models.Forms).filter(models.Forms.id == str(self.formID)).first()
-            query.questions = str(self.questions)
-            query.userAnswers = str(self.userAnswers)
-            query.correctAnswers = str(self.correctAnswers)
-        else:
-            session.add(models.Forms(id=models.generateUUID(self.formID[:1]), ownerID=self.ownerID, questions=str(self.questions), userAnswers=str(self.userAnswers), correctAnswers=str(self.correctAnswers)))
-        session.commit()
-        session.close()
-        return True
+        if self.questions:
+            session = models.Session()
+            if self.formID in models.query(models.Forms.id):
+                query = session.query(models.Forms).filter(models.Forms.id == str(self.formID)).first()
+                query.questions = str(self.questions)
+                query.userAnswers = str(self.userAnswers)
+                query.correctAnswers = str(self.correctAnswers)
+            else:
+                session.add(models.Forms(id=models.generateUUID(self.formID[:1]), ownerID=self.ownerID, questions=str(self.questions), userAnswers=str(self.userAnswers), correctAnswers=str(self.correctAnswers)))
+            session.commit()
+            session.close()
+            return True
+        return False
     
     def remove(self):
         session = models.Session()
@@ -93,10 +96,10 @@ class form:
         if self.isOwner:
             qN = q(models.generateUUID('q'), questionType, question, choices, order)
         self.questions.append(qN.questionID)
-        self.put()
         return qN.questionID
         
     def addAnswer(self, questionID, answer=None, order=None):
+        #print(models.generateUUID('a')+" "+self.userID+" "+questionID+" "+order)
         if answer:
             aN = a(models.generateUUID('a'), self.userID, questionID, answer)
         else:

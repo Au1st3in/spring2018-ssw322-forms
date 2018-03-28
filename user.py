@@ -18,7 +18,12 @@ class user:
     
     def get(self):
         if self.userID in models.query(models.Users.id):
-            self.forms = models.query(models.Users, str(self.userID)).get_forms()
+            result, session = [], models.Session()
+            query = session.query(models.Forms).filter(models.Forms.ownerID == str(self.userID)).all()
+            session.close()
+            for o in query:
+                result.append(o.id)
+            self.forms = result
             return True
         return False
     

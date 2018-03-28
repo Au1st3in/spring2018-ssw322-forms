@@ -15,6 +15,7 @@ class answer:
             if questionID and a:
                 self.questionID = questionID
                 self.answer = a
+                self.put()
             else:
                 raise ValueError()
     
