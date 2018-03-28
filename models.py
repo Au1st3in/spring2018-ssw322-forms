@@ -105,7 +105,10 @@ class Answers(Base):
         return str(self.questionID)
     
     def get_answer(self):
-        return ast.literal_eval(self.answer)
+        try:
+            return ast.literal_eval(self.answer)
+        except:
+            return str(self.answer)
 
     
     #def __str__(self):
