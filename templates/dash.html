@@ -9,66 +9,67 @@
       <h2>DASHBOARD</h2><br>
     </div>
 
-    {% for form in user.forms %}
-
-      {% if form.isTest %}
-        <div class="row s10">
-          <div class="col s2"><br><br></div>
-          <div class="col s8">
-            <div class="card horizontal cyan">
-              <div class="card-stacked">
-                <div class="card-content white-text">
-                  <h4>{{form.name.upper()}}</h4>
-                </div>
-                <div class="card-action cyan darken-1 right-align">
-                  <a class="white-text left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEST</a>
-                  <a class="yellow-text text-lighten-1" href="#">MODIFY</a>
-                  {% if form.userAnswers|length > 0 %}
-                    <a class="yellow-text text-lighten-1" href="#">GRADE</a> <!-- IF MORE THAN ONE USER-ANSWER -->
-                  {% endif %}
-                  {% if form.published %}
-                    <a class="yellow-text text-lighten-1" href="/publish/{{form.id}}">UNPUBLISH</a> <!-- IF PUBLISHED -->
-                    <a class="yellow-text text-lighten-1" href="/view/{{form.id}}">SHARE</a> <!-- IF PUBLISHED -->
-                  {% else %}
-                    <a class="yellow-text text-lighten-1" href="/publish/{{form.id}}">PUBLISH</a> <!-- IF NOT PUBLISHED -->
-                  {% endif %}
-                  <a class="yellow-text text-lighten-1" href="#">REMOVE</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div><br>
-      {% else %}
-        <div class="row s10">
-          <div class="col s2"><br><br></div>
-          <div class="col s8">
-            <div class="card horizontal yellow darken-2">
-              <div class="card-stacked">
-                <div class="card-content white-text">
-                  <h4>{{form.name.upper()}}</h4>
-                </div>
-                <div class="card-action yellow darken-3 right-align">
-                  <a class="white-text left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SURVEY</a>
-                  <a class="cyan-text text-darken-2" href="#">MODIFY</a>
-                  {% if form.userAnswers|length > 0 %}
-                    <a class="cyan-text text-darken-2" href="#">TABULATE</a> <!-- IF MORE THAN ONE USER-ANSWER -->
-                  {% endif %}
-                  {% if form.published %}
-                    <a class="cyan-text text-darken-2" href="/publish/{{form.id}}"</a> <!-- IF PUBLISHED -->
-                    <a class="cyan-text text-darken-2" href="/view/{{form.id}}">SHARE</a> <!-- IF PUBLISHED -->
-                  {% else %}
-                    <a class="cyan-text text-darken-2" href="/publish/{{form.id}}">PUBLISH</a> <!-- IF NOT PUBLISHED -->
-                  {% endif %}
-                  <a class="cyan-text text-darken-2" href="#">REMOVE</a>
+    {% if user.forms|length > 0 %}
+      {% for form in user.forms %}
+        {% if form.isTest %}
+          <div class="row s10">
+            <div class="col s2"><br><br></div>
+            <div class="col s8">
+              <div class="card horizontal cyan">
+                <div class="card-stacked">
+                  <div class="card-content white-text">
+                    <h4>{{form.name.upper()}}</h4>
+                  </div>
+                  <div class="card-action cyan darken-1 right-align">
+                    <a class="white-text left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEST</a>
+                    <a class="yellow-text text-lighten-1" href="#">MODIFY</a>
+                    {% if form.userAnswers|length > 0 %}
+                      <a class="yellow-text text-lighten-1" href="#">GRADE</a> <!-- IF MORE THAN ONE USER-ANSWER -->
+                    {% endif %}
+                    {% if form.published %}
+                      <a class="yellow-text text-lighten-1" href="/publish/{{form.id}}">UNPUBLISH</a> <!-- IF PUBLISHED -->
+                      <a class="yellow-text text-lighten-1" href="/view/{{form.id}}">SHARE</a> <!-- IF PUBLISHED -->
+                    {% else %}
+                      <a class="yellow-text text-lighten-1" href="/publish/{{form.id}}">PUBLISH</a> <!-- IF NOT PUBLISHED -->
+                    {% endif %}
+                    <a class="yellow-text text-lighten-1" href="/remove/{{form.id}}">REMOVE</a>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div><br>
-      {% endif %}
-    {% endfor %}
+          </div><br>
+        {% else %}
+          <div class="row s10">
+            <div class="col s2"><br><br></div>
+            <div class="col s8">
+              <div class="card horizontal yellow darken-2">
+                <div class="card-stacked">
+                  <div class="card-content white-text">
+                    <h4>{{form.name.upper()}}</h4>
+                  </div>
+                  <div class="card-action yellow darken-3 right-align">
+                    <a class="white-text left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SURVEY</a>
+                    <a class="cyan-text text-darken-2" href="#">MODIFY</a>
+                    {% if form.userAnswers|length > 0 %}
+                      <a class="cyan-text text-darken-2" href="#">TABULATE</a> <!-- IF MORE THAN ONE USER-ANSWER -->
+                    {% endif %}
+                    {% if form.published %}
+                      <a class="cyan-text text-darken-2" href="/publish/{{form.id}}"</a> <!-- IF PUBLISHED -->
+                      <a class="cyan-text text-darken-2" href="/view/{{form.id}}">SHARE</a> <!-- IF PUBLISHED -->
+                    {% else %}
+                      <a class="cyan-text text-darken-2" href="/publish/{{form.id}}">PUBLISH</a> <!-- IF NOT PUBLISHED -->
+                    {% endif %}
+                    <a class="cyan-text text-darken-2" href="/remove/{{form.id}}">REMOVE</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div><br>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
 
-    {% if user.forms[(user.forms|length)-1].isTest %}
+    {% if user.forms|length > 0 and user.forms[(user.forms|length)-1].isTest %}
       <div class="row s10 center">
         <a class="btn-floating btn-large waves-effect waves-light yellow darken-2 modal-trigger" href="#formTypes" title="CREATE FORM"><i class="material-icons">add</i></a>
       </div>
@@ -94,7 +95,6 @@
         <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat">EXIT</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       </div><br>
     </div>
-
 
   </div>
 </div>

@@ -142,7 +142,10 @@ def create_test_post():
     """  """
     user = logged_in()
     if user:
-        name = request.form['text'].strip()
+        try:
+            name = request.form['text'].strip()
+        except:
+            name = None
         form = models.Form(name=name, owner=user, isTest=True)
         form.save()
         return render_template('create.html', user=user, isTest=form.isTest, name=name)
