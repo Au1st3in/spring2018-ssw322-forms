@@ -27,11 +27,12 @@
                     <a class="yellow-text text-lighten-1" href="#">GRADE</a> <!-- IF MORE THAN ONE USER-ANSWER -->
                   {% endif %}
                   {% if form.published %}
-                    <a class="yellow-text text-lighten-1" href="#">UNPUBLISH</a> <!-- IF PUBLISHED -->
-                    <a class="yellow-text text-lighten-1" href="#">SHARE</a> <!-- IF PUBLISHED -->
+                    <a class="yellow-text text-lighten-1" href="/publish/{{form.id}}">UNPUBLISH</a> <!-- IF PUBLISHED -->
+                    <a class="yellow-text text-lighten-1" href="/view/{{form.id}}">SHARE</a> <!-- IF PUBLISHED -->
                   {% else %}
-                    <a class="yellow-text text-lighten-1" href="#">PUBLISH</a> <!-- IF NOT PUBLISHED -->
+                    <a class="yellow-text text-lighten-1" href="/publish/{{form.id}}">PUBLISH</a> <!-- IF NOT PUBLISHED -->
                   {% endif %}
+                  <a class="yellow-text text-lighten-1" href="#">REMOVE</a>
                 </div>
               </div>
             </div>
@@ -53,11 +54,12 @@
                     <a class="cyan-text text-darken-2" href="#">TABULATE</a> <!-- IF MORE THAN ONE USER-ANSWER -->
                   {% endif %}
                   {% if form.published %}
-                    <a class="cyan-text text-darken-2" href="#">UNPUBLISH</a> <!-- IF PUBLISHED -->
-                    <a class="cyan-text text-darken-2" href="#">SHARE</a> <!-- IF PUBLISHED -->
+                    <a class="cyan-text text-darken-2" href="/publish/{{form.id}}"</a> <!-- IF PUBLISHED -->
+                    <a class="cyan-text text-darken-2" href="/view/{{form.id}}">SHARE</a> <!-- IF PUBLISHED -->
                   {% else %}
-                    <a class="cyan-text text-darken-2" href="#">PUBLISH</a> <!-- IF NOT PUBLISHED -->
+                    <a class="cyan-text text-darken-2" href="/publish/{{form.id}}">PUBLISH</a> <!-- IF NOT PUBLISHED -->
                   {% endif %}
+                  <a class="cyan-text text-darken-2" href="#">REMOVE</a>
                 </div>
               </div>
             </div>

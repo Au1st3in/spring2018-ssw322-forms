@@ -38,6 +38,34 @@ class Answer(mongoengine.Document):
     question = mongoengine.ReferenceField('Question', required=True)
     answer =  mongoengine.StringField(required=True)
 
+def user(user_id):
+    if user_id:
+        for u in User.objects:
+            if(user_id == str(u.id)):
+                return u
+    return None
+
+def form(form_id):
+    if form_id:
+        for f in Form.objects:
+            if(form_id == str(f.id)):
+                return f
+    return None
+
+def question(question_id):
+    if question_id:
+        for q in Question.objects:
+            if(question_id == str(q.id)):
+                return q
+    return None
+
+def answer(answer_id):
+    if answer_id:
+        for a in Answer.objects:
+            if(answer_id == str(a.id)):
+                return a
+    return None
+
 mongoengine.connect(config['mongodb']['db'], host='mongodb+srv://'+config['mongodb']['user']+':'+config['mongodb']['pass']+'@ssw322-jg1uf.mongodb.net/')
 
 def flush():

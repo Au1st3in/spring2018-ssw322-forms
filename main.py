@@ -69,39 +69,11 @@ def logged_in():
                 for cA in f.correctAnswers:
                     cA.delete()
                 f.delete()
-    return user(user_id)
-
-def user(user_id):
-    if user_id:
-        for u in models.User.objects:
-            if(user_id == str(u.id)):
-                return u
-    return None
-
-def form(form_id):
-    if form_id:
-        for f in models.Form.objects:
-            if(form_id == str(f.id)):
-                return f
-    return None
-
-def question(question_id):
-    if question_id:
-        for q in models.Question.objects:
-            if(question_id == str(q.id)):
-                return q
-    return None
-
-def answer(answer_id):
-    if answer_id:
-        for a in models.Answer.objects:
-            if(answer_id == str(a.id)):
-                return a
-    return None
-
+    return models.user(user_id)
 
 @app.route('/')
 def index():
+    """ Home Login Button Page """
     user = logged_in()
     if user:
         return redirect('/dash')
@@ -109,14 +81,57 @@ def index():
 
 @app.route('/dash')
 def dash():
+    """ Logged In User's Dashboard """
     user = logged_in()
     if user:
         return render_template('dash.html', user=user)
     return redirect('/')
 
 
+
+
+
+
+
+@app.route('/publish/<state>')
+def publish(state):
+    """ Toggles published status for Form """
+    user = logged_in()
+    if user:
+        f = models.form(state)
+        f.published = not f.published
+        f.save()
+        return redirect('/dash')
+    return redirect('/')
+
+@app.route('/view/<state>')
+def view(state):
+    """ Displays Form Questions and Answers """
+    user = logged_in()
+    f = models.form(state)
+    if(f.published or f.owner==user):
+        return #PUBLISHED
+    return #NOT PUBLISHED
+
+@app.route('/remove/<state>')
+def remove(state):
+    """ Removes Form from Database """
+    user = logged_in()
+    if user:
+        f = models.form(state)
+        f.delete()
+        return redirect('/dash')
+    return redirect('/')
+
+
+
+
+
+
+
 @app.route('/create-test')
 def create_test():
+    """  """
     user = logged_in()
     if user:
         return render_template('create.html', user=user, formType="test", name=None)
@@ -124,6 +139,7 @@ def create_test():
 
 @app.route('/create-test', methods=['POST'])
 def create_test_post():
+    """  """
     user = logged_in()
     if user:
         name = request.form['text'].strip()
@@ -132,34 +148,36 @@ def create_test_post():
         return render_template('create.html', user=user, isTest=form.isTest, name=name)
     return redirect('/')
 
+@app.route('/<state>') #formID?add=QT&num=NUM
+def questions(state):
+    """  """
+    user = logged_in()
+    if user:
+        form = models.form(state)
+        if form:
+            question = models.Question(form=form, questionType=request.args.get('add', type=str))
+            form.questions.append(question)
+            question.save()
+            form.save()
+            return render_template('create/'+question.questionType+'.html', user=user, form=form, question=question, questionNumber=request.args.get('num', type=int))
+    return redirect('/')
+
+
+
+
+
+
+
 @app.route('/create-survey')
 def create_survey():
+    """  """
     user = logged_in()
     if user:
         return render_template('create.html', user=user, isTest=False)
     return redirect('/')
 
-@app.route('/<state>') #formID?add=QT&num=NUM
-def questions(state):
-    user = logged_in()
-    if user:
-        form = form(state)
-        if form:
-            question = models.Question(form=form, questionType=request.args.get('add', type=str))
-            question.save()
-            return render_template('questions/'+str(state)+'.html', user=user, form=form, question=question, questionNumber=request.args.get('num', type=int))
-    return redirect('/')
 
-"""
-@app.route('/view/<formID>', methods=['GET', 'POST'])
-def take(formID):
-    form = None
-    for f in Form.objects:
-        if(f.id == formID):
-            form = f
-    if(form):
-        return #TODO RENDER FORM VIEW
-    return redirect('/') #FORM NOT FOUND"""
+
 
 
 if __name__ == "__main__":
