@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+  <div class="section">
+    <div class="col s10">
+      <h6 class="center"><a class="grey-text" href="mailto:{{user.email}}">{{user.email.upper()}}</a></h6><br><br><br>
+      {% if isTest %}
+        <h2><a class="grey-text lighten-1" href="/dash">DASH</a><a class="grey-text lighten-1"> &raquo; </a>CREATE TEST</h2><br>
+      {% else %}
+        <h2><a class="grey-text lighten-1" href="/dash">DASH</a><a class="grey-text lighten-1"> &raquo; </a>CREATE SURVEY</h2><br>
+      {% endif %}
+    </div>
+
+    <div class="row s10">
+      <div class="col s1"></div>
+      {% if name %}
+        <div class="input-field col s3">
+          <input disabled placeholder="    {{name.upper()}}" id="name" type="text" class="validate">
+          {% if isTest %}
+            <label for="name">TEST NAME</label>
+          {% else %}
+            <label for="name">SURVEY NAME</label>
+          {% endif %}
+        </div>
+      {% else %}
+        <form class="input-field col s3" method="POST">
+          <input value="    " id="name" name="text" type="text" class="validate">
+          {% if isTest %}
+            <label for="name">TEST NAME</label>
+          {% else %}
+            <label for="name">SURVEY NAME</label>
+          {% endif %}
+          <p class="right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+          <button class="btn waves-effect waves-light cyan right" type="submit" name="action">CREATE</button>
+        </form>
+      {% endif %}
+      <div class="col s1 right"></div>
+      <div class="col s2 right"><br>
+        <select class="browser-default">
+          <option value="" disabled selected>QUESTION TYPE</option>
+          {% if name %}
+            <option value="shortAnswer">SHORT ANSWER</option>
+            <option value="essay">ESSAY</option>
+            <option value="trueFalse">TRUE/FALSE</option>
+            <option value="multipleChoice">MULTIPLE CHOICE</option>
+            <option value="matching">MATCHING</option>
+            <option value="ranking">RANKING</option>
+          {% endif %}
+        </select>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+{% endblock %}

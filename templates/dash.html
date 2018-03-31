@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+  <div class="section">
+    <div class="col s10">
+      <h6 class="center"><a class="grey-text" href="mailto:{{user.email}}">{{user.email.upper()}}</a></h6><br>
+      <h5 class="center grey-text darken-1">WELCOME BACK, {{user.name.split(" ")[0].upper()}}!</h5>
+      <h2>DASHBOARD</h2><br>
+    </div>
+
+    {% for form in user.forms %}
+
+      {% if form.isTest %}
+        <div class="row s10">
+          <div class="col s2"><br><br></div>
+          <div class="col s8">
+            <div class="card horizontal cyan">
+              <div class="card-stacked">
+                <div class="card-content white-text">
+                  <h4>{{form.name.upper()}}</h4>
+                </div>
+                <div class="card-action cyan darken-1 right-align">
+                  <a class="white-text left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEST</a>
+                  <a class="yellow-text text-lighten-1" href="#">MODIFY</a>
+                  {% if form.userAnswers|length > 0 %}
+                    <a class="yellow-text text-lighten-1" href="#">GRADE</a> <!-- IF MORE THAN ONE USER-ANSWER -->
+                  {% endif %}
+                  {% if form.published %}
+                    <a class="yellow-text text-lighten-1" href="#">UNPUBLISH</a> <!-- IF PUBLISHED -->
+                    <a class="yellow-text text-lighten-1" href="#">SHARE</a> <!-- IF PUBLISHED -->
+                  {% else %}
+                    <a class="yellow-text text-lighten-1" href="#">PUBLISH</a> <!-- IF NOT PUBLISHED -->
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><br>
+      {% else %}
+        <div class="row s10">
+          <div class="col s2"><br><br></div>
+          <div class="col s8">
+            <div class="card horizontal yellow darken-2">
+              <div class="card-stacked">
+                <div class="card-content white-text">
+                  <h4>{{form.name.upper()}}</h4>
+                </div>
+                <div class="card-action yellow darken-3 right-align">
+                  <a class="white-text left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SURVEY</a>
+                  <a class="cyan-text text-darken-2" href="#">MODIFY</a>
+                  {% if form.userAnswers|length > 0 %}
+                    <a class="cyan-text text-darken-2" href="#">TABULATE</a> <!-- IF MORE THAN ONE USER-ANSWER -->
+                  {% endif %}
+                  {% if form.published %}
+                    <a class="cyan-text text-darken-2" href="#">UNPUBLISH</a> <!-- IF PUBLISHED -->
+                    <a class="cyan-text text-darken-2" href="#">SHARE</a> <!-- IF PUBLISHED -->
+                  {% else %}
+                    <a class="cyan-text text-darken-2" href="#">PUBLISH</a> <!-- IF NOT PUBLISHED -->
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><br>
+      {% endif %}
+    {% endfor %}
+
+    {% if user.forms[(user.forms|length)-1].isTest %}
+      <div class="row s10 center">
+        <a class="btn-floating btn-large waves-effect waves-light yellow darken-2 modal-trigger" href="#formTypes" title="CREATE FORM"><i class="material-icons">add</i></a>
+      </div>
+    {% else %}
+      <div class="row s10 center">
+        <a class="btn-floating btn-large waves-effect waves-light cyan darken-2 modal-trigger" href="#formTypes" title="CREATE FORM"><i class="material-icons">add</i></a>
+      </div>
+    {% endif %}
+
+    <div id="formTypes" class="modal">
+      <div class="row s8 modal-content">
+        <br><h4>&nbsp;&nbsp;CHOOSE FORM TYPE</h4><br><br>
+        <div class="col s4"></div>
+        <div class="col s1">
+          <a class="waves-effect waves-light btn-large cyan darken-2 yellow-text text-lighten-1" href="/create-test">&nbsp;&nbsp;TEST&nbsp;&nbsp;</a>
+        </div>
+        <div class="col s1"></div>
+        <div class="col s1">
+          <a class="waves-effect waves-light btn-large yellow darken-2 cyan-text text-darken-2" href="/create-survey">SURVEY</a>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat">EXIT</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      </div><br>
+    </div>
+
+
+  </div>
+</div>
+
+{% endblock %}
