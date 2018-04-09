@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Test Questions Template</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/scrolling-nav.css" rel="stylesheet">
+    <script src="bootstrap-checkbox-1.5.0/dist/js/bootstrap-checkbox.js" defer></script>
+
+  </head>
+  <script>
+    $(':checkbox').checkboxpicker();
+  </script>
+
+  <script>
+    function allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+    function drag(ev) {
+        ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    function drop(ev) {
+        ev.preventDefault();
+        var data = ev.dataTransfer.getData("text");
+        ev.target.appendChild(document.getElementById(data));
+    }
+  </script>
+
+  <script>
+  dragItem1 = document.getElementById("answer1");
+  dragItem2 = document.getElementById("answer2");
+  dragItem3 = document.getElementById("answer3");
+  dragItem4 = document.getElementById("answer4");
+
+//This is the event that changes it when mouse is over
+dragItem.addEventListener("mouseover", HandleStart);
+
+//These are events that change it back when the dragging is finished
+dragItem.addEventListener("mouseout", HandleEnd);
+dragItem.addEventListener("dragend", HandleEnd);
+temp = dragItem.innerHTML;
+
+//This is launched when it is hovered over
+function HandleStart(e){
+    e.preventDefault();
+    text = e.target.innerHTML
+    rounded = Math.round(Number(text)*10)/10; //Rounds the number to two decimal places
+    e.target.innerHTML = rounded;
+}
+
+//This is launched when dragging has finished
+function HandleEnd(e) {
+    e.preventDefault();
+    e.target.innerHTML = temp; //Reverts to original
+}
+</script>
+
+  <body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">Questions Template</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="https://thumbs.gfycat.com/NarrowSmartGoral-max-1mb.gif">For the boys</a>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <header class="bg-primary text-white">
+      <!-- <div class="container text-center">
+        <h1>Test Name</h1>
+        <p class="lead">Due by:</p>
+      </div> -->
+      <center>
+        <h1>IMPORTANT</h1>
+        <p>Have jQuery and node.js installed</p>
+        <p><i>npm install jquery</i></p>
+        <p>To check if they are installed: run <i>node -v</i> and <i>npm -v</i></p>
+      </center>
+    </header>
+
+  <section id="test_questions">
+    <div id="true_false">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <p class="lead">Question: True/False</p>
+            <button type="button" class="btn btn-success" style="width: 49%; margin-left: 6px;">True</button>
+            <button type="button" class="btn btn-danger" style="width: 49%;">False</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+
+    <!-- <section id="multiple_choice"> -->
+    <div id="multiple_choice">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <p class="lead">Question: Multiple Choice</p>
+            <ul class = "list-group">
+              <li class = "list-group-item">
+                <div class="checkbox">
+                  <input type="checkbox" id="checkbox" />
+                  <label for="checkbox">
+                    Answer
+                  </label>
+                </div>
+              </li>
+            <li class = "list-group-item">
+                  <div class="checkbox">
+                    <input type="checkbox" id="checkbox" />
+                    <label for="checkbox">
+                        Answer
+                    </label>
+                </div>
+            </li>
+            <li class = "list-group-item">
+                  <div class="checkbox">
+                    <input type="checkbox" id="checkbox" />
+                    <label for="checkbox">
+                        Answer
+                    </label>
+                </div>
+            </li>
+            <li class = "list-group-item">
+                  <div class="checkbox">
+                    <input type="checkbox" id="checkbox" />
+                    <label for="checkbox">
+                        Answer
+                    </label>
+                </div>
+            </li>
+            </ul>
+         </div>
+       </div>
+      </div>
+    </div>
+    <br>
+
+    <!-- <section id="short_answer"> -->
+    <div id="short_answer">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <div class="form-group">
+                <p class="lead">Question: Short Answer</p>
+                <textarea class="form-control" rows="5" id="comment"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="essay">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <div class="form-group">
+                <p class="lead">Question: Essay</p>
+                <textarea class="form-control" rows="10" id="comment"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="ranking">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <div class="form-group">
+                <p class="lead">Question: Ranking (drag and drop, still working on it...)</p>
+                <div class="answer_choices" style="float: left;">
+                  <p id="answer" ondragstart="drag(event)" draggable="true">Answer</p>
+                  <p id="answer" ondragstart="drag(event)" draggable="true">Answer</p>
+                  <p id="answer" ondragstart="drag(event)" draggable="true">Answer</p>
+                  <p id="answer" ondragstart="drag(event)" draggable="true">Answer</p>
+                </div>
+                <div class="ranking_choices" style="float: right;">
+                  <div ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80px;height:30px;border:1px solid #000;"></div>
+                  <br>
+                  <div ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80px;height:30px;border:1px solid #000;"></div>
+                  <br>
+                  <div ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80px;height:30px;border:1px solid #000;"></div>
+                  <br>
+                  <div ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80px;height:30px;border:1px solid #000;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+  </section>
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Brockybois</p>
+      </div>
+      <!-- /.container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom JavaScript for this theme -->
+    <script src="js/scrolling-nav.js"></script>
+
+  </body>
+
+</html>
