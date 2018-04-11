@@ -10,13 +10,34 @@
 
     <title>Test Questions Template</title>
 
+    <!-- jQuery to handle the draggables and movables -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="css/scrolling-nav.css" rel="stylesheet">
-    <script src="bootstrap-checkbox-1.5.0/dist/js/bootstrap-checkbox.js" defer></script>
 
+    <script src="bootstrap-checkbox-1.5.0/dist/js/bootstrap-checkbox.js" defer></script>
+    <script src="http://rubaxa.github.io/Sortable/Sortable.js"></script>
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+      <style>
+        #sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+        #sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
+        #sortable li span { position: absolute; margin-left: -1.3em; }
+      </style>
+      <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+      <script>
+        $( function() {
+          $( "#sortable" ).sortable();
+          $( "#sortable" ).disableSelection();
+        } );
+      </script>
   </head>
   <script>
     $(':checkbox').checkboxpicker();
@@ -44,6 +65,7 @@
   dragItem3 = document.getElementById("answer3");
   dragItem4 = document.getElementById("answer4");
 
+
 //This is the event that changes it when mouse is over
 dragItem.addEventListener("mouseover", HandleStart);
 
@@ -66,6 +88,8 @@ function HandleEnd(e) {
     e.target.innerHTML = temp; //Reverts to original
 }
 </script>
+
+
 
   <body id="page-top">
 
@@ -193,20 +217,21 @@ function HandleEnd(e) {
           <div class="col-lg-8 mx-auto">
             <div class="form-group">
                 <p class="lead">Question: Ranking (drag and drop, still working on it...)</p>
-                <div class="answer_choices" style="float: left;">
-                  <p id="answer" ondragstart="drag(event)" draggable="true">Answer</p>
-                  <p id="answer" ondragstart="drag(event)" draggable="true">Answer</p>
-                  <p id="answer" ondragstart="drag(event)" draggable="true">Answer</p>
-                  <p id="answer" ondragstart="drag(event)" draggable="true">Answer</p>
-                </div>
-                <div class="ranking_choices" style="float: right;">
-                  <div ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80px;height:30px;border:1px solid #000;"></div>
-                  <br>
-                  <div ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80px;height:30px;border:1px solid #000;"></div>
-                  <br>
-                  <div ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80px;height:30px;border:1px solid #000;"></div>
-                  <br>
-                  <div ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80px;height:30px;border:1px solid #000;"></div>
+                <div class="ranking_choices" style="float: left;">
+                  <style scoped>
+                    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
+                  </style>
+                  <!-- Configuration can be stored! -->
+                  <ul id="simpleList" class="list-group">
+                  	<li class="list-group-item">Answer 1</a></li>
+                  	<li class="list-group-item">Answer 2</li>
+                  	<li class="list-group-item">Answer 3</li>
+                  	<li class="list-group-item">Answer 4</li>
+                  	<li class="list-group-item">Answer 5</li>
+                  </ul>
+                  <script>
+                      Sortable.create(simpleList, { /* options */ });
+                  </script>
                 </div>
               </div>
             </div>
