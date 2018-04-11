@@ -19,7 +19,9 @@
 
     <!-- Custom styles for this template -->
     <link href="css/scrolling-nav.css" rel="stylesheet">
+
     <script src="bootstrap-checkbox-1.5.0/dist/js/bootstrap-checkbox.js" defer></script>
+    <script src="http://rubaxa.github.io/Sortable/Sortable.js"></script>
 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="/resources/demos/style.css">
@@ -216,15 +218,20 @@ function HandleEnd(e) {
             <div class="form-group">
                 <p class="lead">Question: Ranking (drag and drop, still working on it...)</p>
                 <div class="ranking_choices" style="float: left;">
-                  <ul id="sortable">
-                    <li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Answer 1</li>
-                    <li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Answer 2</li>
-                    <li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Answer 3</li>
-                    <li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Answer 4</li>
-                    <li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Answer 5</li>
-                    <li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Answer 6</li>
-                    <li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Answer 7</li>
+                  <style scoped>
+                    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
+                  </style>
+                  <!-- Configuration can be stored! -->
+                  <ul id="simpleList" class="list-group">
+                  	<li class="list-group-item">Answer 1</a></li>
+                  	<li class="list-group-item">Answer 2</li>
+                  	<li class="list-group-item">Answer 3</li>
+                  	<li class="list-group-item">Answer 4</li>
+                  	<li class="list-group-item">Answer 5</li>
                   </ul>
+                  <script>
+                      Sortable.create(simpleList, { /* options */ });
+                  </script>
                 </div>
               </div>
             </div>
