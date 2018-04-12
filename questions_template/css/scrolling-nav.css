@@ -128,3 +128,9 @@ section {
   color: #fff;
   background-color: #5bc0de;
 }
+
+.btn-success, .btn-danger {
+  color: black;
+  background-color: white;
+  outline-color: black;
+}

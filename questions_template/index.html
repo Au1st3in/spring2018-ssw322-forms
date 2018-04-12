@@ -111,18 +111,18 @@ function HandleEnd(e) {
       </div>
     </nav>
 
-    <header class="bg-primary text-white">
+    <!-- <header class="bg-primary text-white"> -->
       <!-- <div class="container text-center">
         <h1>Test Name</h1>
         <p class="lead">Due by:</p>
       </div> -->
-      <center>
+      <!-- <center>
         <h1>IMPORTANT</h1>
         <p>Have jQuery and node.js installed</p>
         <p><i>npm install jquery</i></p>
         <p>To check if they are installed: run <i>node -v</i> and <i>npm -v</i></p>
       </center>
-    </header>
+    </header> -->
 
   <section id="test_questions">
     <div id="true_false">
@@ -130,7 +130,7 @@ function HandleEnd(e) {
         <div class="row">
           <div class="col-lg-8 mx-auto">
             <p class="lead">Question: True/False</p>
-            <button type="button" class="btn btn-success" style="width: 49%; margin-left: 6px;">True</button>
+            <button type="button" class="btn btn-success" style="width: 49%; margin-left: 6px; font-color: #000000;">True</button>
             <button type="button" class="btn btn-danger" style="width: 49%;">False</button>
           </div>
         </div>
@@ -190,8 +190,9 @@ function HandleEnd(e) {
         <div class="row">
           <div class="col-lg-8 mx-auto">
             <div class="form-group">
-                <p class="lead">Question: Short Answer</p>
-                <textarea class="form-control" rows="5" id="comment"></textarea>
+                <p class="lead">Question: Short Answer </p>
+                <textarea class="form-control" rows="5" id="comment" maxlength="180"></textarea>
+                <p style="float: right; ">Character Count: </p>
               </div>
             </div>
           </div>
@@ -216,7 +217,7 @@ function HandleEnd(e) {
         <div class="row">
           <div class="col-lg-8 mx-auto">
             <div class="form-group">
-                <p class="lead">Question: Ranking (drag and drop, still working on it...)</p>
+                <p class="lead">Question: Ranking</p>
                 <div class="ranking_choices" style="float: left;">
                   <style scoped>
                     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
@@ -242,13 +243,7 @@ function HandleEnd(e) {
 
   </section>
 
-    <!-- Footer -->
-    <footer class="py-5 bg-dark">
-      <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; Brockybois</p>
-      </div>
-      <!-- /.container -->
-    </footer>
+
 
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
