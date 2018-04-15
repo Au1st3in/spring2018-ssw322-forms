@@ -3,8 +3,6 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
-  <title>BROCKHAMPTON FORMS</title>
-  <link rel="shortcut icon" href="static/img/brockhampton.ico"/>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700"/>
@@ -13,23 +11,12 @@
 </head>
 <body>
 
-  {% if user %}
-  <div class="fixed-action-btn">
-    <a class="btn-floating waves-light btn-large red lighten-2" title="LOGOUT" href='/logout'>
-      <i class="large material-icons">input</i>
-    </a>
-  </div>
-  {% endif %}
 
-  {% block content %}
-  {% endblock %}
+{% block content %}
+{% endblock %}
+
 
 <footer>
-  <!--<div>
-    <div class="container">
-      <p><a class="grey-text right" href="http://materializecss.com" target="_blank" rel="noopener noreferrer">Materialize</a><a class="grey-text right">&nbsp;and&nbsp;</a><a class="grey-text right" href="http://flask.pocoo.org" target="_blank" rel="noopener noreferrer">Flask</a><a class="grey-text right">Built with&nbsp;</a><a class="grey-text right"><i class="fa fa-code"></i>&nbsp;&nbsp;</a></p>
-    </div>
-  </div>-->
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
   <script src="static/js/parallax.min.js"></script>
@@ -45,6 +32,6 @@
       });
     })(jQuery);
   </script>
-</footer>  
+</footer>
 </body>
 </html>

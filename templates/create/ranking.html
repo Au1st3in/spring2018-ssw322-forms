@@ -1,9 +1,9 @@
-{% extends 'create/_base.html' %}
+{% extends 'create/base.html' %}
 {% block content %}
 
 {% if isTest %}
 <div class="input-field col s10">
-  <input id="question" name="question" type="text" class="validate" pattern="[^.!?]+\?" required>
+  <input id="question" name="question" type="text" class="validate" pattern="[^.!?]+((\.)|(\!)|(\?))" required>
   <label for="question" data-error="wrong" data-success="right">QUESTION</label>
 </div>
 <div class="input-field col s2">
@@ -19,7 +19,7 @@
 </script>
 {% else %}
 <div class="input-field col s12">
-  <input id="question" name="question" type="text" class="validate" pattern="[^.!?]+\?" required>
+  <input id="question" name="question" type="text" class="validate" pattern="[^.!?]+((\.)|(\!)|(\?))" required>
   <label for="question" data-error="wrong" data-success="right">QUESTION</label>
 </div>
 <script>

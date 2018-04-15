@@ -20,8 +20,14 @@ if app.debug:
 
 google_login = GoogleLogin(app)
 
-
-
+def logged_in():
+    """ """
+    user_id = request.cookies.get('user_id')
+    if user_id:
+        for u in models.User.objects:
+            if(user_id == str(u.id)):
+                return u
+    return None
 
 @app.route('/login')
 def login():
@@ -59,15 +65,6 @@ def logout():
         response.set_cookie('user_id', expires=0)
     return response
 
-def logged_in():
-    """ """
-    user_id = request.cookies.get('user_id')
-    if user_id:
-        for u in models.User.objects:
-            if(user_id == str(u.id)):
-                return u
-    return None
-
 @app.route('/')
 def index():
     """ Home Login Button Page """
@@ -84,12 +81,6 @@ def dash():
         return render_template('dash.html', user=user)
     return redirect('/')
 
-
-
-
-
-
-
 @app.route('/publish/<state>')
 def publish(state):
     """ Toggles published status for Form """
@@ -100,34 +91,6 @@ def publish(state):
         f.save()
         return redirect('/dash')
     return redirect('/')
-
-
-
-
-@app.route('/take/<state>')
-def take(state):
-    """  """
-    user = logged_in()
-    f = models.form(state)
-    if(f.owner==user):
-        return view(state)
-    elif(f.published):
-        return #PUBLISHED
-    return #NOT PUBLISHED
-
-
-@app.route('/view/<state>')
-def view(state):
-    """ Displays Form Questions and Answers """
-    user = logged_in()
-    f = models.form(state)
-    if(f.published or f.owner==user):
-        return #PUBLISHED
-    return #NOT PUBLISHED
-
-
-
-
 
 @app.route('/remove/<state>')
 def remove(state):
@@ -148,6 +111,30 @@ def remove(state):
             f.delete()
         return redirect('/dash')
     return redirect('/')
+
+@app.route('/view/<state>')
+def view(state):
+    """ Displays Form Questions and Answers """
+    user = logged_in()
+    f = models.form(state)
+    if f:
+        if(f.published and f.owner==user):
+            return render_template('view.html', form=f)
+    return take(state)
+
+@app.route('/take/<state>')
+def take(state):
+    """  """
+    user = logged_in()
+    f = models.form(state)
+    if f:
+        if(f.published and f.owner==user):
+            return view(state)
+        elif(f.published):
+            return render_template('take.html', form=f)
+        return render_template('unpublished.html', user=user, isTest=f.isTest)
+    else:
+        return render_template('unpublished.html', user=user, isTest=None)
 
 
 
@@ -227,7 +214,7 @@ def add_question(formType, questionType, formID):
                     q = models.Question(form=form, questionType=questionType, question=request.form['question'].strip(), points=int(request.form['points']), order=[random.sample(order[0], len(order[0])),random.sample(order[1], len(order[1]))])
                     a = models.Answer(owner=user, question=q, answer=str(answer))
                 else:
-                    q = models.Question(form=form, questionType=questionType, question=request.form['question'].strip(), choices=choices)                  
+                    q = models.Question(form=form, questionType=questionType, question=request.form['question'].strip(), order=order)                  
             elif questionType == 'ranking':
                 order = []
                 for r in range(1, int(request.form['ranks'])+1):
@@ -247,7 +234,10 @@ def add_question(formType, questionType, formID):
             return render_template('create/'+str(questionType)+'.html', user=user, questions=len(form.questions), formID=form.id, isTest=form.isTest, name=form.name)
     return redirect('/')
 
-
+@app.errorhandler(404)
+def page_not_found(e):
+    ''' Page Not Found Redirect '''
+    return render_template('404.html'), 404
 
 if __name__ == "__main__":
     app.run()
