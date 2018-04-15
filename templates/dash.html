@@ -22,7 +22,11 @@
                   </div>
                   <div class="card-action cyan darken-1 right-align">
                     <a class="white-text left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{form.questions|length}} QUESTION TEST</a>
-                    <a class="yellow-text text-lighten-1" href="#">MODIFY</a>
+                    {% if form.userAnswers|length > 0 %}
+                      <a class="yellow-text text-lighten-1" href="/modify/{{form.id}}" onclick="return confirm('Are you sure, all {{form.userAnswers|length}} user responses will be removed?')">MODIFY</a>
+                    {% else %}
+                      <a class="yellow-text text-lighten-1" href="/modify/{{form.id}}">MODIFY</a>
+                    {% endif %}
                     {% if form.userAnswers|length > 0 %}
                       <a class="yellow-text text-lighten-1" href="#">GRADE</a> <!-- IF MORE THAN ONE USER-ANSWER -->
                     {% endif %}
@@ -49,7 +53,12 @@
                   </div>
                   <div class="card-action yellow darken-3 right-align">
                     <a class="white-text left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{form.questions|length}} QUESTION SURVEY</a>
-                    <a class="cyan-text text-darken-2" href="#">MODIFY</a>
+                    {% if form.userAnswers|length > 0 %}
+                      <a class="cyan-text text-darken-2" href="/modify/{{form.id}}" onclick="return confirm('Are you sure, all {{form.userAnswers|length}} user responses will be removed?')">MODIFY</a>
+                    {% else %}
+                      <a class="cyan-text text-darken-2" href="/modify/{{form.id}}">MODIFY</a>
+                    {% endif %}
+
                     {% if form.userAnswers|length > 0 %}
                       <a class="cyan-text text-darken-2" href="#">TABULATE</a> <!-- IF MORE THAN ONE USER-ANSWER -->
                     {% endif %}

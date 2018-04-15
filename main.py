@@ -112,6 +112,10 @@ def remove(state):
         return redirect('/dash')
     return redirect('/')
 
+
+
+
+
 @app.route('/view/<state>')
 def view(state):
     """ Displays Form Questions and Answers """
@@ -119,7 +123,7 @@ def view(state):
     f = models.form(state)
     if f:
         if(f.published and f.owner==user):
-            return render_template('view.html', form=f)
+            return render_template('view.html', user=user, form=f)
     return take(state)
 
 @app.route('/take/<state>')
@@ -135,6 +139,22 @@ def take(state):
         return render_template('unpublished.html', user=user, isTest=f.isTest)
     else:
         return render_template('unpublished.html', user=user, isTest=None)
+
+@app.route('/modify/<state>')
+def modify(state):
+    """  """
+    user = logged_in()
+    f = models.form(state)
+    if f:
+        if(f.owner==user):
+            for uaF in f.userAnswers:
+                for uA in uaF:
+                    uA.delete()
+            f.userAnswers = []
+            f.save()
+            return render_template('modify.html', user=user, form=f, isTest=f.isTest)
+    return redirect('/')
+
 
 
 
