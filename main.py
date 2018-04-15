@@ -159,7 +159,7 @@ def create_iframe(formType):
     """  """
     user = logged_in()
     if user and formType.lower() in {'test', 'survey'}:
-        return render_template('create/temp.html', isTest=formType.lower()=='test')
+        return render_template('create/_temp.html', isTest=formType.lower()=='test')
     return redirect('/')
 
 @app.route('/create/<formType>', methods=['GET', 'POST'])
@@ -168,14 +168,16 @@ def create(formType):
     user = logged_in()
     if user and formType.lower() in {'test', 'survey'}:
         form = None
-        isTest = formType.lower() == 'test'
+        isTest = (formType.lower() == 'test')
+        print(formType)
+        print(isTest)
         if request.method == 'POST':
             form = models.Form(owner=user, published=False, isTest=isTest, name=request.form['text'].strip())
             form.save()
             user.forms.append(form)
             user.save()
         if form:
-            return render_template('create.html', user=user, formID=form.id, isTest=form.id, name=form.name)
+            return render_template('create.html', user=user, formID=form.id, isTest=form.isTest, name=form.name)
         return render_template('create.html', user=user, formID=None, isTest=isTest, name=None)
     return redirect('/')
 
@@ -187,20 +189,54 @@ def add_question(formType, questionType, formID):
         form = models.form(formID)
         if request.method == 'POST' and questionType in models.questionTypes and form:
             a = None
-            print("SUCESS")
-            print(questionType)
             if questionType in {'shortAnswer', 'essay'}:
-                q = models.Question(form=form, questionType=questionType, question=request.form['question'].strip(), points=int(request.form['points']))
-            elif questionType == "trueFalse":
-                q = models.Question(form=form, questionType=questionType, question=request.form['question'].strip(), points=int(request.form['points']))
                 if form.isTest:
+                    q = models.Question(form=form, questionType=questionType, question=request.form['question'].strip(), points=int(request.form['points']))
+                else:
+                    q = models.Question(form=form, questionType=questionType, question=request.form['question'].strip())
+            elif questionType == "trueFalse":
+                if form.isTest:
+                    q = models.Question(form=form, questionType=questionType, question=request.form['question'].strip(), points=int(request.form['points']))
                     a = models.Answer(owner=user, question=q, answer=str(request.form['answer']))
+                else:
+                    q = models.Question(form=form, questionType=questionType, question=request.form['question'].strip())
             elif questionType == 'multipleChoice':
-                return
+                choices = []
+                for c in range(1, int(request.form['choices'])+1):
+                    choices.append(str(request.form['c'+str(c)]))
+                if form.isTest:
+                    q = models.Question(form=form, questionType=questionType, question=request.form['question'].strip(), points=int(request.form['points']), choices=choices)
+                    a = models.Answer(owner=user, question=q, answer=choices[int(request.form['answer'])-1])
+                else:
+                    q = models.Question(form=form, questionType=questionType, question=request.form['question'].strip(), choices=choices)
             elif questionType == 'matching':
-                return
+                order = [[],[]]
+                for mr in  range(1, int(request.form['matches'])+1):
+                    order[0].append(str(request.form['mr'+str(mr)]))
+                for me in  range(1, int(request.form['matches'])+1):
+                    try:
+                        order[1].append(str(request.form['me'+str(me)]))
+                    except:
+                        order[1].append("")
+                if form.isTest:
+                    answer = {}
+                    for m in order[0]:
+                        answer[m] = []
+                    for a in  range(1, int(request.form['matches'])+1):
+                        answer[(order[0][int(request.form['answer'+str(a)][1])-1])].append(order[1][int(request.form['answer'+str(a)][3])-1])      
+                    q = models.Question(form=form, questionType=questionType, question=request.form['question'].strip(), points=int(request.form['points']), order=[random.sample(order[0], len(order[0])),random.sample(order[1], len(order[1]))])
+                    a = models.Answer(owner=user, question=q, answer=str(answer))
+                else:
+                    q = models.Question(form=form, questionType=questionType, question=request.form['question'].strip(), choices=choices)                  
             elif questionType == 'ranking':
-                return
+                order = []
+                for r in range(1, int(request.form['ranks'])+1):
+                    order.append(str(request.form['r'+str(r)]))
+                if form.isTest:
+                    q = models.Question(form=form, questionType=questionType, question=request.form['question'].strip(), points=int(request.form['points']), order=random.sample(order, len(order)))
+                    a = models.Answer(owner=user, question=q, answer=str(order))
+                else:
+                    q = models.Question(form=form, questionType=questionType, question=request.form['question'].strip(), order=order)
             q.save()
             form.questions.append(q)
             if a:
@@ -210,45 +246,6 @@ def add_question(formType, questionType, formID):
         if form:
             return render_template('create/'+str(questionType)+'.html', user=user, questions=len(form.questions), formID=form.id, isTest=form.isTest, name=form.name)
     return redirect('/')
-
-
-
-
-"""@app.route('/create-test/trueFalse/<state>', methods=['GET', 'POST'])
-def create_test_trueFalse(state):
-    """  """
-    user = logged_in()
-    if user:
-        req = forms.trueFalse_Test(request.form)
-        form = models.form(state)
-        if request.method == 'POST' and req.validate() and form:
-            q = models.Question(form=form, questionType="trueFalse", question=req.question.data, points=req.points.data)
-            a = models.Answer(owner=user, question=q, answer=str(req.answer.data))
-            q.save()
-            form.questions.append(q)
-            a.save()
-            form.correctAnswers.append(a)
-            form.save()
-        if form:
-            #req.question.data = "HELLO THERE"
-            return render_template('create/trueFalse.html', user=user, req=req, questionss=len(form.questions), formID=form.id, isTest=form.isTest, name=form.name)
-    return redirect('/')"""
-"""
-@app.route('/<state>') #formID?add=QT&num=NUM
-def questions(state):
-    """  """
-    user = logged_in()
-    if user:
-        form = models.form(state)
-        if form:
-            question = models.Question(form=form, questionType=request.args.get('add', type=str))
-            form.questions.append(question)
-            question.save()
-            form.save()
-            return render_template('create/'+question.questionType+'.html', user=user, form=form, question=question, questionNumber=request.args.get('num', type=int))
-    return redirect('/')"""
-
-
 
 
 

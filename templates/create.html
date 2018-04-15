@@ -61,9 +61,9 @@
     <div class="col s10 center-align">
 
       {% if isTest %}
-        <iframe class="center" name="iframe" id="iframe" frameBorder="0" src="/create/test/temp" width="1000" height="400"></iframe>
+        <iframe class="center" name="iframe" id="iframe" frameBorder="0" src="/create/test/temp" width="1000" height="500"></iframe>
       {% else %}
-        <iframe class="center" name="iframe" id="iframe" frameBorder="0" src="/create/survey/temp" width="1000" height="400"></iframe>
+        <iframe class="center" name="iframe" id="iframe" frameBorder="0" src="/create/survey/temp" width="1000" height="500"></iframe>
       {% endif %}
       <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
       <script>
@@ -79,15 +79,9 @@
       </script>
 
     </div>
-      {% if isTest %}
-        <div class="col s10 center">
-          <a id="finish" style="visibility: hidden" class="btn-large waves-effect waves-light cyan darken-2 modal-trigger" href="/dash">FINISH</a>
-        </div>
-      {% else %}
-        <div class="col s10 center">
-          <a id="finish" style="visibility: hidden" class="btn-large waves-effect waves-light yellow darken-2" href="/dash">FINISH</a>
-        </div>
-      {% endif %}
+    <div class="col s10 center">
+      <a id="finish" style="visibility: hidden" class="btn-large waves-effect waves-light cyan modal-trigger" href="/dash">FINISH</a>
+    </div>
     {% endif %}
 
 

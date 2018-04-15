@@ -9,17 +9,17 @@
 
 {% if isTest %}
 <div class="input-field col s4">
+  <input id="points" name="points" type="number" class="validate" min="0" max="100" required>
+  <label for="points" data-error="wrong" data-success="right">POINTS</label>
+</div>
+<div class="col s1"><br></div>
+
+<div class="input-field col s4">
   <select class="browser-default" id="answer" name="answer" required>
     <option value="" disabled selected>CORRECT ANSWER</option>
     <option value="True">TRUE</option>
     <option value="False">FALSE</option>
   </select>
-</div>
-<div class="col s1"><br></div>
-
-<div class="input-field col s4">
-  <input id="points" name="points" type="number" class="validate" min="0" max="100" required>
-  <label for="points" data-error="wrong" data-success="right">POINTS</label>
 </div>
 <div class="col s1"><br></div>
 {% endif %}

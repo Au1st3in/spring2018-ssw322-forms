@@ -28,10 +28,10 @@ class Form(mongoengine.Document):
 class Question(mongoengine.Document):
     form = mongoengine.ReferenceField('Form')
     questionType = mongoengine.StringField(required=True, choices=questionTypes)
-    question = mongoengine.StringField(required=True, default="")
+    question = mongoengine.StringField(required=True)
     choices = mongoengine.ListField(default=[])
     order = mongoengine.ListField(default=[])
-    points = mongoengine.IntField(default=5)
+    points = mongoengine.IntField(default=0)
     
 class Answer(mongoengine.Document):
     owner = mongoengine.ReferenceField('User', required=True) #Either User or Form

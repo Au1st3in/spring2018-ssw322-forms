@@ -1,0 +1,65 @@
+{% extends 'create/_base.html' %}
+{% block content %}
+
+{% if isTest %}
+<div class="input-field col s7">
+  <input id="question" name="question" type="text" class="validate" pattern="[^.!?]+\?" required>
+  <label for="question" data-error="wrong" data-success="right">QUESTION</label>
+</div>
+
+<div class="input-field col s2">
+  <input id="points" name="points" type="number" class="validate" min="0" max="100" required>
+    <label for="points" data-error="wrong" data-success="right">POINTS</label>
+</div>
+
+<div class="input-field col s3">
+  <select class="browser-default" id="answer" name="answer" required>
+    <option value="" disabled selected>CORRECT CHOICE</option>
+    <option value="1">CHOICE 1</option>
+    <option value="2">CHOICE 2</option>
+  </select>
+</div>
+
+<script>
+  function add_fields() {
+      var choices = (document.forms["form"].getElementsByTagName('input')).length-2;
+      document.getElementById('wrapper').innerHTML += '\n<div class="input-field col s4"><input id="c'+choices+'" name="c'+choices+'" type="text" class="validate" required><label for="c'+choices+'" data-error="wrong" data-success="right">CHOICE '+choices+'</label></div>\r\n';
+      document.getElementById('choices').value=choices.toString();
+      document.getElementById('answer').innerHTML += '<option value="'+choices+'">CHOICE '+choices+'</option>';
+  }
+</script>
+{% else %}
+<div class="input-field col s10">
+  <input id="question" name="question" type="text" class="validate" pattern="[^.!?]+\?" required>
+  <label for="question" data-error="wrong" data-success="right">QUESTION</label>
+</div>
+
+<script>
+  function add_fields() {
+      var choices = (document.forms["form"].getElementsByTagName('input')).length-1;
+      document.getElementById('wrapper').innerHTML += '\n<div class="input-field col s4"><input id="c'+choices+'" name="c'+choices+'" type="text" class="validate" required><label for="c'+choices+'" data-error="wrong" data-success="right">CHOICE '+choices+'</label></div>\r\n';
+      document.getElementById('choices').value=choices.toString();
+      document.getElementById('answer').innerHTML += '<option value="'+choices+'">CHOICE '+choices+'</option>';
+  }
+</script>
+{% endif %}
+<div class="col s1"><br></div>
+
+<div class="center" id="wrapper">
+    <div class="col s2"><br></div>
+    <input id="choices" name="choices" type="hidden" value="2" required>
+    <div class="input-field col s4">
+      <input id="c1" name="c1" type="text" class="validate" required>
+      <label for="c1" data-error="wrong" data-success="right">CHOICE 1</label>
+    </div>
+    <div class="input-field col s4">
+      <input id="c2" name="c2" type="text" class="validate" required>
+      <label for="c2" data-error="wrong" data-success="right">CHOICE 2</label>
+    </div>
+</div>
+
+<div class="col s12 center">
+  <button class="btn-floating waves-effect waves-light cyan" type="button" id="more_fields" onclick="add_fields();"><i class="material-icons">add</i></button>
+</div>
+
+{% endblock %}
