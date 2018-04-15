@@ -8,16 +8,17 @@ import models
 
 if __name__ == "__main__":
     models.flush()
-    f = None
-    for u in models.User.objects:
-        f = models.Form(name="Testing tEst Form", owner=u, published=True, isTest=True)
-        f.save()
-        q = models.Question(form=f, questionType='trueFalse', question="This statement is True.")
-        f.questions = [ q ]
-        u.forms = [ f ]
-        q.save()
-        f.save()
-        u.save()
+    for name in {"Testing tesT Form #1", "Testing tesT Form #2"}:
+        f = None
+        for u in models.User.objects:
+            f = models.Form(name=name, owner=u, published=True, isTest=True)
+            f.save()
+            q = models.Question(form=f, questionType='trueFalse', question="This statement is True.")
+            f.questions = [ q ]
+            u.forms = [ f ]
+            q.save()
+            f.save()
+            u.save()
     
     print("USERS")
     for u in models.User.objects:
