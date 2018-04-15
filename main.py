@@ -257,7 +257,7 @@ def add_question(formType, questionType, formID):
 @app.errorhandler(404)
 def page_not_found(e):
     ''' Page Not Found Redirect '''
-    return render_template('404.html'), 404
+    return render_template('404.html', url=url_for('static',filename='kanye.png')), 404
 
 if __name__ == "__main__":
     app.run()
