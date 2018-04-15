@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css"/>
+  <link href="../static/css/parallax.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body>
+  <script type="text/javascript">
+      if (parent.location==location) {
+          location.href = "/dash"
+      }
+  </script>
+
+  <h5>QUESTION #{{questions+1}}</h5>
+  <div class="col s1"><br><br></div>
+
+  <div class="row">
+    <form class="col s12" id="form" method="POST">
+
+      {% block content %}
+      {% endblock %}
+
+    </form>
+  </div>
+
+  <p class="right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+  <button class="btn waves-effect waves-light cyan right" type="submit" name="action" form="form">ADD QUESTION</button>
+
+  <footer>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+    <script src="../static/js/parallax.min.js"></script>
+    <script>
+      (function($){
+        $(function(){
+          $('.sidenav').sidenav();
+          $('.parallax').parallax();
+        });
+        $(document).ready(function(){
+          $('.modal').modal();
+          $('select').formSelect();
+        });
+      })(jQuery);
+    </script
+  </footer>
+</body>
+</html>

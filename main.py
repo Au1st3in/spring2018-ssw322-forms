@@ -20,6 +20,9 @@ if app.debug:
 
 google_login = GoogleLogin(app)
 
+
+
+
 @app.route('/login')
 def login():
     if request.cookies.get('user_id'):
@@ -60,16 +63,10 @@ def logged_in():
     """ """
     user_id = request.cookies.get('user_id')
     if user_id:
-        for f in models.Form.objects:
-            if(len(f.questions)==0):
-                for q in f.questions:
-                    q.delete()
-                for uA in f.userAnswers:
-                    uA.delete()
-                for cA in f.correctAnswers:
-                    cA.delete()
-                f.delete()
-    return models.user(user_id)
+        for u in models.User.objects:
+            if(user_id == str(u.id)):
+                return u
+    return None
 
 @app.route('/')
 def index():
@@ -104,6 +101,21 @@ def publish(state):
         return redirect('/dash')
     return redirect('/')
 
+
+
+
+@app.route('/take/<state>')
+def take(state):
+    """  """
+    user = logged_in()
+    f = models.form(state)
+    if(f.owner==user):
+        return view(state)
+    elif(f.published):
+        return #PUBLISHED
+    return #NOT PUBLISHED
+
+
 @app.route('/view/<state>')
 def view(state):
     """ Displays Form Questions and Answers """
@@ -113,13 +125,27 @@ def view(state):
         return #PUBLISHED
     return #NOT PUBLISHED
 
+
+
+
+
 @app.route('/remove/<state>')
 def remove(state):
     """ Removes Form from Database """
     user = logged_in()
     if user:
         f = models.form(state)
-        f.delete()
+        if f in user.forms and f:
+            user.forms.remove(f)
+            user.save()
+            for qF in f.questions:
+                qF.delete()
+            for caF in f.correctAnswers:
+                caF.delete()
+            for uaF in f.userAnswers:
+                for uA in uaF:
+                    uA.delete()
+            f.delete()
         return redirect('/dash')
     return redirect('/')
 
@@ -128,29 +154,86 @@ def remove(state):
 
 
 
+@app.route('/create/<formType>/temp')
+def create_iframe(formType):
+    """  """
+    user = logged_in()
+    if user and formType.lower() in {'test', 'survey'}:
+        return render_template('create/temp.html', isTest=formType.lower()=='test')
+    return redirect('/')
 
-@app.route('/create-test')
-def create_test():
+@app.route('/create/<formType>', methods=['GET', 'POST'])
+def create(formType):
+    """  """
+    user = logged_in()
+    if user and formType.lower() in {'test', 'survey'}:
+        form = None
+        isTest = formType.lower() == 'test'
+        if request.method == 'POST':
+            form = models.Form(owner=user, published=False, isTest=isTest, name=request.form['text'].strip())
+            form.save()
+            user.forms.append(form)
+            user.save()
+        if form:
+            return render_template('create.html', user=user, formID=form.id, isTest=form.id, name=form.name)
+        return render_template('create.html', user=user, formID=None, isTest=isTest, name=None)
+    return redirect('/')
+
+@app.route('/create/<formType>/<questionType>/<formID>', methods=['GET', 'POST'])
+def add_question(formType, questionType, formID):
+    """  """
+    user = logged_in()
+    if user and formType.lower() in {'test', 'survey'}:
+        form = models.form(formID)
+        if request.method == 'POST' and questionType in models.questionTypes and form:
+            a = None
+            print("SUCESS")
+            print(questionType)
+            if questionType in {'shortAnswer', 'essay'}:
+                q = models.Question(form=form, questionType=questionType, question=request.form['question'].strip(), points=int(request.form['points']))
+            elif questionType == "trueFalse":
+                q = models.Question(form=form, questionType=questionType, question=request.form['question'].strip(), points=int(request.form['points']))
+                if form.isTest:
+                    a = models.Answer(owner=user, question=q, answer=str(request.form['answer']))
+            elif questionType == 'multipleChoice':
+                return
+            elif questionType == 'matching':
+                return
+            elif questionType == 'ranking':
+                return
+            q.save()
+            form.questions.append(q)
+            if a:
+                a.save()
+                form.correctAnswers.append(a)
+            form.save()
+        if form:
+            return render_template('create/'+str(questionType)+'.html', user=user, questions=len(form.questions), formID=form.id, isTest=form.isTest, name=form.name)
+    return redirect('/')
+
+
+
+
+"""@app.route('/create-test/trueFalse/<state>', methods=['GET', 'POST'])
+def create_test_trueFalse(state):
     """  """
     user = logged_in()
     if user:
-        return render_template('create.html', user=user, formType="test", name=None)
-    return redirect('/')
-
-@app.route('/create-test', methods=['POST'])
-def create_test_post():
-    """  """
-    user = logged_in()
-    if user:
-        try:
-            name = request.form['text'].strip()
-        except:
-            name = None
-        form = models.Form(name=name, owner=user, isTest=True)
-        form.save()
-        return render_template('create.html', user=user, isTest=form.isTest, name=name)
-    return redirect('/')
-
+        req = forms.trueFalse_Test(request.form)
+        form = models.form(state)
+        if request.method == 'POST' and req.validate() and form:
+            q = models.Question(form=form, questionType="trueFalse", question=req.question.data, points=req.points.data)
+            a = models.Answer(owner=user, question=q, answer=str(req.answer.data))
+            q.save()
+            form.questions.append(q)
+            a.save()
+            form.correctAnswers.append(a)
+            form.save()
+        if form:
+            #req.question.data = "HELLO THERE"
+            return render_template('create/trueFalse.html', user=user, req=req, questionss=len(form.questions), formID=form.id, isTest=form.isTest, name=form.name)
+    return redirect('/')"""
+"""
 @app.route('/<state>') #formID?add=QT&num=NUM
 def questions(state):
     """  """
@@ -163,21 +246,7 @@ def questions(state):
             question.save()
             form.save()
             return render_template('create/'+question.questionType+'.html', user=user, form=form, question=question, questionNumber=request.args.get('num', type=int))
-    return redirect('/')
-
-
-
-
-
-
-
-@app.route('/create-survey')
-def create_survey():
-    """  """
-    user = logged_in()
-    if user:
-        return render_template('create.html', user=user, isTest=False)
-    return redirect('/')
+    return redirect('/')"""
 
 
 

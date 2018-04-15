@@ -21,18 +21,18 @@
                     <h4>{{form.name.upper()}}</h4>
                   </div>
                   <div class="card-action cyan darken-1 right-align">
-                    <a class="white-text left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEST</a>
+                    <a class="white-text left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{form.questions|length}} QUESTION TEST</a>
                     <a class="yellow-text text-lighten-1" href="#">MODIFY</a>
                     {% if form.userAnswers|length > 0 %}
                       <a class="yellow-text text-lighten-1" href="#">GRADE</a> <!-- IF MORE THAN ONE USER-ANSWER -->
                     {% endif %}
                     {% if form.published %}
                       <a class="yellow-text text-lighten-1" href="/publish/{{form.id}}">UNPUBLISH</a> <!-- IF PUBLISHED -->
-                      <a class="yellow-text text-lighten-1" href="/view/{{form.id}}">SHARE</a> <!-- IF PUBLISHED -->
+                      <a class="yellow-text text-lighten-1" href="/take/{{form.id}}" target="_blank">SHARE</a> <!-- IF PUBLISHED -->
                     {% else %}
                       <a class="yellow-text text-lighten-1" href="/publish/{{form.id}}">PUBLISH</a> <!-- IF NOT PUBLISHED -->
                     {% endif %}
-                    <a class="yellow-text text-lighten-1" href="/remove/{{form.id}}">REMOVE</a>
+                    <a class="yellow-text text-lighten-1" href="/remove/{{form.id}}" onclick="return confirm('Are you sure?')">REMOVE</a>
                   </div>
                 </div>
               </div>
@@ -48,18 +48,18 @@
                     <h4>{{form.name.upper()}}</h4>
                   </div>
                   <div class="card-action yellow darken-3 right-align">
-                    <a class="white-text left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SURVEY</a>
+                    <a class="white-text left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{form.questions|length}} QUESTION SURVEY</a>
                     <a class="cyan-text text-darken-2" href="#">MODIFY</a>
                     {% if form.userAnswers|length > 0 %}
                       <a class="cyan-text text-darken-2" href="#">TABULATE</a> <!-- IF MORE THAN ONE USER-ANSWER -->
                     {% endif %}
                     {% if form.published %}
-                      <a class="cyan-text text-darken-2" href="/publish/{{form.id}}"</a> <!-- IF PUBLISHED -->
-                      <a class="cyan-text text-darken-2" href="/view/{{form.id}}">SHARE</a> <!-- IF PUBLISHED -->
+                      <a class="cyan-text text-darken-2" href="/publish/{{form.id}}">UNPUBLISH</a> <!-- IF PUBLISHED -->
+                      <a class="cyan-text text-darken-2" href="/take/{{form.id}}" target="_blank">SHARE</a> <!-- IF PUBLISHED -->
                     {% else %}
                       <a class="cyan-text text-darken-2" href="/publish/{{form.id}}">PUBLISH</a> <!-- IF NOT PUBLISHED -->
                     {% endif %}
-                    <a class="cyan-text text-darken-2" href="/remove/{{form.id}}">REMOVE</a>
+                    <a class="cyan-text text-darken-2" href="/remove/{{form.id}}" onclick="return confirm('Are you sure?')">REMOVE</a>
                   </div>
                 </div>
               </div>
@@ -84,11 +84,11 @@
         <br><h4>&nbsp;&nbsp;CHOOSE FORM TYPE</h4><br><br>
         <div class="col s4"></div>
         <div class="col s1">
-          <a class="waves-effect waves-light btn-large cyan darken-2 yellow-text text-lighten-1" href="/create-test">&nbsp;&nbsp;TEST&nbsp;&nbsp;</a>
+          <a class="waves-effect waves-light btn-large cyan darken-2 yellow-text text-lighten-1" href="/create/test">&nbsp;&nbsp;TEST&nbsp;&nbsp;</a>
         </div>
         <div class="col s1"></div>
         <div class="col s1">
-          <a class="waves-effect waves-light btn-large yellow darken-2 cyan-text text-darken-2" href="/create-survey">SURVEY</a>
+          <a class="waves-effect waves-light btn-large yellow darken-2 cyan-text text-darken-2" href="/create/survey">SURVEY</a>
         </div>
       </div>
       <div class="modal-footer">

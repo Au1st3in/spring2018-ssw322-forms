@@ -16,7 +16,7 @@
       <div class="col s1"></div>
       {% if name %}
         <div class="input-field col s3">
-          <input disabled placeholder="    {{name.upper()}}" id="name" type="text" class="validate">
+          <input disabled placeholder="{{name.upper()}}" id="name" type="text" class="validate">
           {% if isTest %}
             <label for="name">TEST NAME</label>
           {% else %}
@@ -25,7 +25,7 @@
         </div>
       {% else %}
         <form class="input-field col s3" method="POST">
-          <input value="    " id="name" name="text" type="text" class="validate">
+          <input value="" id="name" name="text" type="text" class="validate" required>
           {% if isTest %}
             <label for="name">TEST NAME</label>
           {% else %}
@@ -37,7 +37,11 @@
       {% endif %}
       <div class="col s1 right"></div>
       <div class="col s2 right"><br>
+        {% if formID %}
+        <select class="browser-default" onchange="document.getElementById('iframe').src = window.location.toString() + '/' + this.options[this.selectedIndex].value + '/{{formID}}'">
+        {% else %}
         <select class="browser-default">
+        {% endif %}
           <option value="" disabled selected>QUESTION TYPE</option>
           {% if name %}
             <option value="shortAnswer">SHORT ANSWER</option>
@@ -49,7 +53,43 @@
           {% endif %}
         </select>
       </div>
+
     </div>
+
+    {% if formID %}
+    <div class="col s1"><br></div>
+    <div class="col s10 center-align">
+
+      {% if isTest %}
+        <iframe class="center" name="iframe" id="iframe" frameBorder="0" src="/create/test/temp" width="1000" height="400"></iframe>
+      {% else %}
+        <iframe class="center" name="iframe" id="iframe" frameBorder="0" src="/create/survey/temp" width="1000" height="400"></iframe>
+      {% endif %}
+      <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+      <script>
+      $(function() {
+        var timesRefreshed = 0;
+        $('#iframe').on('load', function() {
+          if(timesRefreshed >= 2){
+            $("#finish").css("visibility", "visible");
+          }
+          timesRefreshed++;
+        });
+      });
+      </script>
+
+    </div>
+      {% if isTest %}
+        <div class="col s10 center">
+          <a id="finish" style="visibility: hidden" class="btn-large waves-effect waves-light cyan darken-2 modal-trigger" href="/dash">FINISH</a>
+        </div>
+      {% else %}
+        <div class="col s10 center">
+          <a id="finish" style="visibility: hidden" class="btn-large waves-effect waves-light yellow darken-2" href="/dash">FINISH</a>
+        </div>
+      {% endif %}
+    {% endif %}
+
 
 
   </div>

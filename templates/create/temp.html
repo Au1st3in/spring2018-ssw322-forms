@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css"/>
+  <link href="static/css/parallax.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body>
+  <script type="text/javascript">
+      if (parent.location==location) {
+          location.href = "/dash"
+      }
+  </script>
+  <div class="col s1"><br><br></div>
+  {% if isTest %}
+    <h4 class="center grey-text text-lighten-2">SELECT QUESTION TYPE TO ADD TO YOUR TEST</h4>
+  {% else %}
+    <h4 class="center grey-text text-lighten-2">SELECT QUESTION TYPE TO ADD TO YOUR SURVEY</h4>
+  {% endif %}
+  <footer>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+  </footer>
+</body>
+</html>
