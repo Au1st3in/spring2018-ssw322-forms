@@ -25,7 +25,7 @@
 <script>
   function add_fields() {
       var ranks = (document.forms["form"].getElementsByTagName('input')).length-1;
-      document.getElementById('wrapper').innerHTML += '\n<div class="input-field col s4"><input id="r'+ranks+'" name="r'+ranks+'" type="text" class="validate" required><label for="r'+ranks+'" data-error="wrong" data-success="right">RANK '+ranks+'</label></div>\r\n';
+      document.getElementById('wrapper').innerHTML += '\n<div class="input-field col s4"><input id="r'+ranks+'" name="r'+ranks+'" type="text" class="validate" required><label for="r'+ranks+'" data-error="wrong" data-success="right">OPTION '+ranks+'</label></div>\r\n';
       document.getElementById('ranks').value=ranks.toString();
   }
 </script>

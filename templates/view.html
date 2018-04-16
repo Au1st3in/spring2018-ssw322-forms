@@ -83,11 +83,11 @@
               {% endif %}
             {% else %}
               <p><label>
-                <input name="True" type="radio"/>
+                <input name="True" type="radio" disabled/>
                 <span>TRUE</span>
               </label></p>
               <p><label>
-                <input name="False" type="radio"/>
+                <input name="False" type="radio" disabled/>
                 <span>FALSE</span>
               </label></p>
             {% endif %}
@@ -111,22 +111,51 @@
             </div>
           </div>
         {% elif (form.questions[n]).questionType == 'matching' %}
-
           {% if form.isTest %}
-
+            <div class="row s10">
+              <div class="col s3"></div>
+              <div class="col s3 center">
+                {% for z in range(((form.questions[n]).order[0])|length) %}
+                  {% set answer=(((form.correctAnswers[n]).answer).lstrip('{')).rstrip('}').split(',') %}
+                  <h6 class="grey-text text-darken-1">{{(((form.questions[n]).order[0])[z]).upper()}} ⟹ {{((answer[z])[((answer[z]).find("'"+(((form.questions[n]).order[0])[z])+"': ["))+((((form.questions[n]).order[0])[z])|length)+5:((answer[z]).find(']'))]).upper()}}</h6>
+                {% endfor %}
+              </div>
+            </div>
           {% else %}
-
+            <div class="row s10">
+              <div class="col s7 right"></div>
+              <div class="col s1 right">
+                <h6 class="grey-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<u>MATCHER</u></h6>
+              </div>
+              <div class="col s1 right">
+                <h6 class="grey-text"><u>MATCHEE</u></h6>
+              </div>
+            </div>
+            {% for z in range(((form.questions[n]).order[0])|length) %}
+              <div class="row s10">
+                <div class="col s7 right"></div>
+                <div class="col s1 right">
+                  <h6 class="grey-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{(((form.questions[n]).order[1])[z]).upper()}}</h6>
+                </div>
+                <div class="col s1 right">
+                  <h6 class="grey-text">{{(((form.questions[n]).order[0])[z]).upper()}}</h6>
+                </div>
+              </div>
+            {% endfor %}
           {% endif %}
-
-
         {% elif (form.questions[n]).questionType == 'ranking' %}
-
-          {% if form.isTest %}
-
-          {% else %}
-
-          {% endif %}
-
+          <div class="row s10">
+            <div class="col s4"></div>
+            <div class="col s3">
+              {% for z in range(((form.questions[n]).order)|length) %}
+                {% if form.isTest %}
+                  <h6 class="grey-text text-darken-2">{{z+1}}. {{((((form.correctAnswers[n]).answer).split(','))[z].lstrip('[')).rstrip(']')}}</h6>
+                {% else %}
+                  <h6 class="grey-text">{{z+1}}. {{((form.questions[n]).order)[z]}}</h6>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
         {% endif %}
       {% endfor %}
       <div class="row s12"><br>
