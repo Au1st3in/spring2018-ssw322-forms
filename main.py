@@ -122,9 +122,10 @@ def view(state):
     user = logged_in()
     f = models.form(state)
     if f:
-        if(f.published and f.owner==user):
+        if(f.owner==user):
             return render_template('view.html', user=user, form=f)
-    return take(state)
+        return redirect('/take/'+state)
+    return redirect('/dash')
 
 @app.route('/take/<state>')
 def take(state):
@@ -132,10 +133,10 @@ def take(state):
     user = logged_in()
     f = models.form(state)
     if f:
-        if(f.published and f.owner==user):
-            return view(state)
+        if(f.owner==user):
+            return redirect('/view/'+state)
         elif(f.published):
-            return render_template('take.html', form=f)
+            return render_template('take.html', user=user, form=f)
         return render_template('unpublished.html', user=user, isTest=f.isTest)
     else:
         return render_template('unpublished.html', user=user, isTest=None)
@@ -152,7 +153,7 @@ def modify(state):
                     uA.delete()
             f.userAnswers = []
             f.save()
-            return render_template('modify.html', user=user, form=f, isTest=f.isTest)
+            return render_template('modify.html', user=user, form=f)
     return redirect('/')
 
 
@@ -199,6 +200,7 @@ def add_question(formType, questionType, formID):
             if questionType in {'shortAnswer', 'essay'}:
                 if form.isTest:
                     q = models.Question(form=form, questionType=questionType, question=request.form['question'].strip(), points=int(request.form['points']))
+                    a = models.Answer(owner=user, question=q, answer="")
                 else:
                     q = models.Question(form=form, questionType=questionType, question=request.form['question'].strip())
             elif questionType == "trueFalse":

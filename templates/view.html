@@ -3,6 +3,8 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+  <title>{{form.name.upper()}}</title>
+  <link rel="shortcut icon" href="static/img/brockhampton.ico"/>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700"/>
@@ -10,12 +12,136 @@
   <link href="static/css/parallax.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
 <body>
+{% if form.owner == user %}
+  <div class="container">
+    <div class="section">
+      <div class="row s12">
+        <h6 class="center"><a class="grey-text" href="mailto:{{user.email}}">{{user.email.upper()}}</a></h6><br><br><br>
+        {% if isTest %}
+          <h2><a class="grey-text lighten-1" href="/dash">DASH</a><a class="grey-text lighten-1"> &raquo; </a>VIEW TEST</h2>
+        {% else %}
+          <h2><a class="grey-text lighten-1" href="/dash">DASH</a><a class="grey-text lighten-1"> &raquo; </a>VIEW SURVEY</h2>
+        {% endif %}
+      </div>
+      <div class="row s12">
+        <h3 class="center grey-text text-darken-2">{{form.name.upper()}}</h3>
+      </div>
+      {% set total_points = [0] %}
+      {% set letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ' %}
+      {% for n in range(form.questions|length) %}
+        <h4 class="grey-text text-darken-1">QUESTION #{{n}}</h4>
+        <div class="row s12">
+          <div class="col s9">
+            <h5 class="grey-text center">{{(form.questions[n]).question.upper()}}</h5>
+          </div>
+          {% if form.isTest %}
+            <div class="col s3">
+              <h5 class="grey-text center">{{(form.questions[n]).points}} POINTS</h5>
+            </div>
+            {% if total_points.append(total_points.pop() + (form.questions[n]).points) %}{% endif %}
+          {% endif %}
+        </div>
+        {% if (form.questions[n]).questionType == 'shortAnswer' %}
+          <div class="row s10">
+            <div class="col s1"></div>
+            <div class="input-field col s8">
+              <input value="" id="short" type="text" class="validate">
+              <label for="short">  SHORT ANSWER</label>
+            </div>
+          </div>
+        {% elif (form.questions[n]).questionType == 'essay' %}
+          <div class="row s10">
+            <div class="col s1"></div>
+            <div class="input-field col s8">
+              <textarea value="" id="textarea" type="text" class="materialize-textarea"></textarea>
+              <label for="textarea">  ESSAY</label>
+            </div>
+          </div>
+        {% elif (form.questions[n]).questionType == 'trueFalse' %}
+        <div class="row s10">
+          <div class="col s3"></div>
+          <div class="col s3">
+            {% if form.isTest %}
+              {% if (form.correctAnswers[n]).answer.title() == 'True' %}
+                <p><label>
+                  <input name="True" type="radio" checked disabled/>
+                  <span>TRUE</span>
+                </label></p>
+                <p><label>
+                  <input name="False" type="radio" disabled/>
+                  <span>FALSE</span>
+                </label></p>
+              {% else %}
+                <p><label>
+                  <input name="True" type="radio" disabled/>
+                  <span>TRUE</span>
+                </label></p>
+                <p><label>
+                  <input name="False" type="radio" checked disabled/>
+                  <span>FALSE</span>
+                </label></p>
+              {% endif %}
+            {% else %}
+              <p><label>
+                <input name="True" type="radio"/>
+                <span>TRUE</span>
+              </label></p>
+              <p><label>
+                <input name="False" type="radio"/>
+                <span>FALSE</span>
+              </label></p>
+            {% endif %}
+          </div>
+        </div>
+        {% elif (form.questions[n]).questionType == 'multipleChoice' %}
+          <div class="row s10">
+            <div class="col s3"></div>
+            <div class="col s3">
+              {% for z in range((form.questions[n]).choices|length) %}
+                {% if form.isTest %}
+                    {% if (form.questions[n]).choices[z] == (form.correctAnswers[n]).answer %}
+                      <h6 style="font-weight: bold;" class="grey-text text-darken-1">{{letters[z]}}. {{(form.questions[n]).choices[z]}}</h6>
+                    {% else %}
+                      <h6 class="grey-text">{{letters[z]}}. {{(form.questions[n]).choices[z]}}</h6>
+                    {% endif %}
+                {% else %}
+                  <h6 class="grey-text">{{letters[z]}}. {{(form.questions[n]).choices[z]}}</h6>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        {% elif (form.questions[n]).questionType == 'matching' %}
+
+          {% if form.isTest %}
+
+          {% else %}
+
+          {% endif %}
 
 
-{% block content %}
-{% endblock %}
+        {% elif (form.questions[n]).questionType == 'ranking' %}
 
+          {% if form.isTest %}
 
+          {% else %}
+
+          {% endif %}
+
+        {% endif %}
+      {% endfor %}
+      <div class="row s12"><br>
+        <h6 class="grey-text left">AUTHOR: {{form.owner.email.upper()}}</h6>
+        {% if form.isTest %}
+          <h6 class="grey-text right">{{total_points[0]}} TOTAL POINTS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h6>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% else %}
+  <script>
+    window.location.replace("/dash");
+  </script>
+{% endif %}
 <footer>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
@@ -29,6 +155,7 @@
       $(document).ready(function(){
         $('.modal').modal();
         $('select').formSelect();
+        $('#textarea').trigger('autoresize');
       });
     })(jQuery);
   </script>
