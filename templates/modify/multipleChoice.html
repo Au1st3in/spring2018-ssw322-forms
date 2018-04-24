@@ -16,7 +16,7 @@
   <select class="browser-default" id="answer" name="answer" required>
     <option value="" disabled>CORRECT CHOICE</option>
     {% for n in range(q.choices|length) %}
-      {% if q.choices[n+1] == a.answer %}
+      {% if q.choices[n] == a.answer %}
         <option value="{{n+1}}" selected>CHOICE {{n+1}}</option>
       {% else %}
         <option value="{{n+1}}">CHOICE {{n+1}}</option>

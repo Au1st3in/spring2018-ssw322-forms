@@ -30,13 +30,12 @@
   </div>
 
   <p class="right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
-  <!--
-  <button id="rem" name="rem" class="btn waves-effect waves-light red lighten-2 right" href="">REMOVE</button>
+  <button onclick="removeQuestion()" class="btn waves-effect waves-light red lighten-2 right" href="">REMOVE</button>
   <script>
-    $(document).ready(function() {
-      $('rem').prop('href', window.location.origin.toString()+'/modify/remove/{{q.id}}')
-    });
-  </script> -->
+    function removeQuestion() {
+      window.top.location.href = window.location.origin.toString()+'/modify/remove/{{q.id}}';
+    }
+  </script>
   <button class="btn waves-effect waves-light cyan right" type="submit" name="action" form="form">EDIT QUESTION</button>
 
 

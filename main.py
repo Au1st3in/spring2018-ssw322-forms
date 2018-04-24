@@ -1,4 +1,4 @@
-import mongoengine, json, models, random
+import mongoengine, json, models, random, ast
 
 from flask import Flask, redirect, render_template, request, url_for, jsonify
 from flask_oauth2_login import GoogleLogin
@@ -178,14 +178,14 @@ def modify_question(formType, questionID):
         else:
             a = None
         form.userAnswers = []
-        if formType.lower() == 'remove':
+        if formType.lower() == 'remove':                
             form.questions.remove(q)
             q.delete()
             if form.isTest:
                 form.correctAnswers.remove(a)
                 a.delete()
             form.save()
-            return redirect('/modify/'+formType+'/temp')
+            return redirect('/modify/'+str(form.id))
         if request.method == 'POST' and form and q:
             if q.questionType in {'shortAnswer', 'essay'}:
                 q.question = request.form['question'].strip()
@@ -247,6 +247,8 @@ def modify_question(formType, questionID):
                 a.save()
             form.save()
         if form:
+            if form.isTest and q.questionType in {'matching', 'ranking'}:
+                a.answer = ast.literal_eval(a.answer)
             return render_template('modify/'+str(q.questionType)+'.html', user=user, questionNumber=qNumber, isTest=form.isTest, q=q, a=a)
     return redirect('/')
 
