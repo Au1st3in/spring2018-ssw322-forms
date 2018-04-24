@@ -12,12 +12,12 @@
   <link href="static/css/parallax.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
 <body>
-{% if form.owner == user %}
+{% if form.owner == user and form.questions|length > 0%}
   <div class="container">
     <div class="section">
       <div class="row s12">
         <h6 class="center"><a class="grey-text" href="mailto:{{user.email}}">{{user.email.upper()}}</a></h6><br><br><br>
-        {% if isTest %}
+        {% if form.isTest %}
           <h2><a class="grey-text lighten-1" href="/dash">DASH</a><a class="grey-text lighten-1"> &raquo; </a>VIEW TEST</h2>
         {% else %}
           <h2><a class="grey-text lighten-1" href="/dash">DASH</a><a class="grey-text lighten-1"> &raquo; </a>VIEW SURVEY</h2>
@@ -29,7 +29,7 @@
       {% set total_points = [0] %}
       {% set letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ' %}
       {% for n in range(form.questions|length) %}
-        <h4 class="grey-text text-darken-1">QUESTION #{{n}}</h4>
+        <h4 class="grey-text text-darken-1">QUESTION #{{n+1}}</h4>
         <div class="row s12">
           <div class="col s9">
             <h5 class="grey-text center">{{(form.questions[n]).question.upper()}}</h5>
@@ -100,12 +100,12 @@
               {% for z in range((form.questions[n]).choices|length) %}
                 {% if form.isTest %}
                     {% if (form.questions[n]).choices[z] == (form.correctAnswers[n]).answer %}
-                      <h6 style="font-weight: bold;" class="grey-text text-darken-1">{{letters[z]}}. {{(form.questions[n]).choices[z]}}</h6>
+                      <h6 style="font-weight: bold;" class="grey-text text-darken-1">{{letters[z]}}. {{(((form.questions[n]).choices[z]).strip()).upper()}}</h6>
                     {% else %}
-                      <h6 class="grey-text">{{letters[z]}}. {{(form.questions[n]).choices[z]}}</h6>
+                      <h6 class="grey-text">{{letters[z]}}. {{(((form.questions[n]).choices[z]).strip()).upper()}}</h6>
                     {% endif %}
                 {% else %}
-                  <h6 class="grey-text">{{letters[z]}}. {{(form.questions[n]).choices[z]}}</h6>
+                  <h6 class="grey-text">{{letters[z]}}. {{(((form.questions[n]).choices[z]).strip()).upper()}}</h6>
                 {% endif %}
               {% endfor %}
             </div>
@@ -116,8 +116,8 @@
               <div class="col s3"></div>
               <div class="col s3 center">
                 {% for z in range(((form.questions[n]).order[0])|length) %}
-                  {% set answer=(((form.correctAnswers[n]).answer).lstrip('{')).rstrip('}').split(',') %}
-                  <h6 class="grey-text text-darken-1">{{(((form.questions[n]).order[0])[z]).upper()}} ⟹ {{((answer[z])[((answer[z]).find("'"+(((form.questions[n]).order[0])[z])+"': ["))+((((form.questions[n]).order[0])[z])|length)+5:((answer[z]).find(']'))]).upper()}}</h6>
+                  {% set answer=(((form.correctAnswers[n]).answer).lstrip('{')).rstrip('}').split(', ') %}
+                  <h6 class="grey-text text-darken-1">{{(((form.questions[n]).order[0])[z]).upper()}}  ⇨  {{(((answer[z])[((answer[z]).find("'"+((((form.questions[n]).order[0])[z]).strip())+"': ["))+(((((form.questions[n]).order[0])[z]).strip())|length)+5:((answer[z]).find(']'))]).replace("'","")).upper().rstrip(']').lstrip('[')}}</h6>
                 {% endfor %}
               </div>
             </div>
@@ -149,9 +149,9 @@
             <div class="col s3">
               {% for z in range(((form.questions[n]).order)|length) %}
                 {% if form.isTest %}
-                  <h6 class="grey-text text-darken-2">{{z+1}}. {{((((form.correctAnswers[n]).answer).split(','))[z].lstrip('[')).rstrip(']')}}</h6>
+                  <h6 class="grey-text text-darken-2">{{z+1}}.&nbsp;{{(((((((form.correctAnswers[n]).answer).split(','))[z].lstrip('[')).rstrip(']')).replace("'","")).strip()).upper()}}</h6>
                 {% else %}
-                  <h6 class="grey-text">{{z+1}}. {{((form.questions[n]).order)[z]}}</h6>
+                  <h6 class="grey-text">{{z+1}}.&nbsp;{{((((form.questions[n]).order)[z]).strip()).upper()}}</h6>
                 {% endif %}
               {% endfor %}
             </div>
@@ -166,6 +166,10 @@
       </div>
     </div>
   </div>
+{% elif form.questions|length == 0 %}
+  <script>
+    window.location.replace("/modify/{{form.id}}");
+  </script>
 {% else %}
   <script>
     window.location.replace("/dash");

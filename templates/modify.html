@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if form.owner == user %}
+
+<div class="container">
+  <div class="section">
+    <div class="col s10">
+      <h6 class="center"><a class="grey-text" href="mailto:{{user.email}}">{{user.email.upper()}}</a></h6><br><br><br>
+      {% if form.isTest %}
+        <h2><a class="grey-text lighten-1" href="/dash">DASH</a><a class="grey-text lighten-1"> &raquo; </a>MODIFY TEST</h2><br>
+        {% set formType = 'test' %}
+      {% else %}
+        <h2><a class="grey-text lighten-1" href="/dash">DASH</a><a class="grey-text lighten-1"> &raquo; </a>MODIFY SURVEY</h2><br>
+        {% set formType = 'survey' %}
+      {% endif %}
+    </div>
+
+    <div class="row s10">
+      <div class="col s1"></div>
+
+      <div class="input-field col s3">
+        <input disabled placeholder="{{(form.name).upper()}}" id="name" type="text" class="validate">
+        {% if form.isTest %}
+          <label for="name">TEST NAME</label>
+        {% else %}
+          <label for="name">SURVEY NAME</label>
+        {% endif %}
+      </div>
+
+      <div class="col s1 right"></div>
+      <div class="col s2 right"><br>
+        <select class="browser-default" onchange="document.getElementById('iframe').src = window.location.origin.toString() + '/' + this.options[this.selectedIndex].value">
+            <option value="" disabled selected>SELECT QUESTION</option>
+            {% if form.questions|length > 0%}
+            <option value="" disabled></option>
+            <option value="" disabled>CURRENT QUESTIONS</option>
+            {% for n in range(form.questions|length) %}
+            <option value="modify/{{formType}}/{{(form.questions[n]).id}}">QUESTION #{{n+1}}</option>
+            {% endfor %}
+            {% endif %}
+            <option value="" disabled></option>
+            <option value="" disabled>ADD QUESTION</option>
+            <option value="create/{{formType}}/shortAnswer/{{form.id}}">SHORT ANSWER</option>
+            <option value="create/{{formType}}/essay/{{form.id}}">ESSAY</option>
+            <option value="create/{{formType}}/trueFalse/{{form.id}}">TRUE/FALSE</option>
+            <option value="create/{{formType}}/multipleChoice/{{form.id}}">MULTIPLE CHOICE</option>
+            <option value="create/{{formType}}/matching/{{form.id}}">MATCHING</option>
+            <option value="create/{{formType}}/ranking/{{form.id}}">RANKING</option>
+        </select>
+      </div>
+
+    </div>
+
+
+    <div class="col s1"><br></div>
+    <div class="col s10 center-align">
+
+      {% if form.isTest %}
+        <iframe class="center" name="iframe" id="iframe" frameBorder="0" src="/modify/test/temp" width="1000" height="500"></iframe>
+      {% else %}
+        <iframe class="center" name="iframe" id="iframe" frameBorder="0" src="/modify/survey/temp" width="1000" height="500"></iframe>
+      {% endif %}
+
+      <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+    </div>
+    <div class="col s10 center">
+      <a class="btn-large waves-effect waves-light cyan modal-trigger" href="/view/{{form.id}}">DONE</a>
+    </div>
+
+
+  </div>
+</div>
+
+{% else %}
+  <script>
+    window.location.replace("/dash");
+  </script>
+{% endif %}
+{% endblock %}

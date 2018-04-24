@@ -1,0 +1,33 @@
+{% extends 'modify/base.html' %}
+{% block content %}
+
+<div class="input-field col s10">
+  <input id="question" name="question" type="text" class="validate" pattern="[^.!?]+((\.)|(\!)|(\?))" value="{{q.question}}" required>
+  <label for="question" data-error="wrong" data-success="right">QUESTION</label>
+</div>
+<div class="col s1"><br></div>
+
+{% if isTest %}
+<div class="input-field col s4">
+  <input id="points" name="points" type="number" class="validate" min="0" max="100" value="{{q.points}}" required>
+  <label for="points" data-error="wrong" data-success="right">POINTS</label>
+</div>
+<div class="col s1"><br></div>
+
+<div class="input-field col s4">
+  <select class="browser-default" id="answer" name="answer" required>
+    <option value="" disabled>CORRECT ANSWER</option>
+    {% if a.answer.lower() == 'true' %}
+    <option value="True" selected>TRUE</option>
+    <option value="False">FALSE</option>
+    {% else %}
+    <option value="True">TRUE</option>
+    <option value="False" selected>FALSE</option>
+    {% endif %}
+  </select>
+</div>
+<div class="col s1"><br></div>
+{% endif %}
+
+
+{% endblock %}

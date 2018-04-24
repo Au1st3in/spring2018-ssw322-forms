@@ -141,6 +141,14 @@ def take(state):
     else:
         return render_template('unpublished.html', user=user, isTest=None)
 
+@app.route('/modify/<formType>/temp')
+def modify_iframe(formType):
+    """  """
+    user = logged_in()
+    if user and formType.lower() in {'test', 'survey'}:
+        return render_template('modify/_temp.html', isTest=formType.lower()=='test')
+    return redirect('/')
+
 @app.route('/modify/<state>')
 def modify(state):
     """  """
@@ -155,6 +163,94 @@ def modify(state):
             f.save()
             return render_template('modify.html', user=user, form=f)
     return redirect('/')
+
+@app.route('/modify/<formType>/<questionID>', methods=['GET', 'POST'])
+def modify_question(formType, questionID):
+    """  """
+    user = logged_in()
+    if user and formType.lower() in {'test', 'survey', 'remove'}:
+        form = models.form(questionID)
+        q = models.question(questionID)
+        form = q.form
+        qNumber = form.questions.index(q) + 1
+        if form.isTest:
+            a = form.correctAnswers[qNumber-1]
+        else:
+            a = None
+        form.userAnswers = []
+        if formType.lower() == 'remove':
+            form.questions.remove(q)
+            q.delete()
+            if form.isTest:
+                form.correctAnswers.remove(a)
+                a.delete()
+            form.save()
+            return redirect('/modify/'+formType+'/temp')
+        if request.method == 'POST' and form and q:
+            if q.questionType in {'shortAnswer', 'essay'}:
+                q.question = request.form['question'].strip()
+                if form.isTest:
+                    q.points = int(request.form['points'])
+            elif q.questionType == "trueFalse":
+                q.question = request.form['question'].strip()
+                if form.isTest:
+                    q.points = int(request.form['points'])
+                    a.answer = str(request.form['answer']).strip()
+            elif q.questionType == 'multipleChoice':
+                choices = []
+                for c in range(1, int(request.form['choices'])+1):
+                    choices.append(str(request.form['c'+str(c)]).strip())
+                
+                q.question = request.form['question'].strip()
+                q.choices = choices
+                if form.isTest:
+                    q.points = int(request.form['points'])
+                    a.answer = choices[int(request.form['answer'])-1].strip()
+            elif q.questionType == 'matching':
+                order = [[],[]]
+                for mr in  range(1, int(request.form['matches'])+1):
+                    order[0].append(str(request.form['mr'+str(mr)]).strip())
+                for me in  range(1, int(request.form['matches'])+1):
+                    try:
+                        order[1].append(str(request.form['me'+str(me)]).strip())
+                    except:
+                        order[1].append("")
+                        
+                q.question = request.form['question'].strip()
+                if form.isTest:
+                    answer = {}
+                    for m in order[0]:
+                        answer[m] = []
+                    for a in  range(1, int(request.form['matches'])+1):
+                        answer[(order[0][int(request.form['answer'+str(a)][1])-1])].append(order[1][int(request.form['answer'+str(a)][3])-1])      
+                    
+                    q.points = int(request.form['points'])
+                    q.order=[random.sample(order[0], len(order[0])),random.sample(order[1], len(order[1]))]
+                    a.answer = str(answer)
+                else:
+                    q.order = order          
+            elif q.questionType == 'ranking':
+                order = []
+                for r in range(1, int(request.form['ranks'])+1):
+                    order.append(str(request.form['r'+str(r)]).strip())
+                
+                q.question = request.form['question'].strip()
+                
+                if form.isTest:
+                    q.points = int(request.form['points'])
+                    q.order = random.sample(order, len(order))
+                    a.answer = answer=str(order)
+                else:
+                    q.order = order
+            q.save()
+            if a:
+                a.save()
+            form.save()
+        if form:
+            return render_template('modify/'+str(q.questionType)+'.html', user=user, questionNumber=qNumber, isTest=form.isTest, q=q, a=a)
+    return redirect('/')
+
+
 
 
 
@@ -206,25 +302,25 @@ def add_question(formType, questionType, formID):
             elif questionType == "trueFalse":
                 if form.isTest:
                     q = models.Question(form=form, questionType=questionType, question=request.form['question'].strip(), points=int(request.form['points']))
-                    a = models.Answer(owner=user, question=q, answer=str(request.form['answer']))
+                    a = models.Answer(owner=user, question=q, answer=str(request.form['answer']).strip())
                 else:
                     q = models.Question(form=form, questionType=questionType, question=request.form['question'].strip())
             elif questionType == 'multipleChoice':
                 choices = []
                 for c in range(1, int(request.form['choices'])+1):
-                    choices.append(str(request.form['c'+str(c)]))
+                    choices.append(str(request.form['c'+str(c)]).strip())
                 if form.isTest:
                     q = models.Question(form=form, questionType=questionType, question=request.form['question'].strip(), points=int(request.form['points']), choices=choices)
-                    a = models.Answer(owner=user, question=q, answer=choices[int(request.form['answer'])-1])
+                    a = models.Answer(owner=user, question=q, answer=choices[int(request.form['answer'])-1].strip())
                 else:
                     q = models.Question(form=form, questionType=questionType, question=request.form['question'].strip(), choices=choices)
             elif questionType == 'matching':
                 order = [[],[]]
                 for mr in  range(1, int(request.form['matches'])+1):
-                    order[0].append(str(request.form['mr'+str(mr)]))
+                    order[0].append(str(request.form['mr'+str(mr)]).strip())
                 for me in  range(1, int(request.form['matches'])+1):
                     try:
-                        order[1].append(str(request.form['me'+str(me)]))
+                        order[1].append(str(request.form['me'+str(me)]).strip())
                     except:
                         order[1].append("")
                 if form.isTest:
@@ -240,7 +336,7 @@ def add_question(formType, questionType, formID):
             elif questionType == 'ranking':
                 order = []
                 for r in range(1, int(request.form['ranks'])+1):
-                    order.append(str(request.form['r'+str(r)]))
+                    order.append(str(request.form['r'+str(r)]).strip())
                 if form.isTest:
                     q = models.Question(form=form, questionType=questionType, question=request.form['question'].strip(), points=int(request.form['points']), order=random.sample(order, len(order)))
                     a = models.Answer(owner=user, question=q, answer=str(order))

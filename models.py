@@ -37,6 +37,7 @@ class Answer(mongoengine.Document):
     owner = mongoengine.ReferenceField('User', required=True) #Either User or Form
     question = mongoengine.ReferenceField('Question', required=True)
     answer =  mongoengine.StringField(required=True)
+    points = mongoengine.IntField(default=0)
 
 def user(user_id):
     if user_id:
