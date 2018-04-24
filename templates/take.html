@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+  <title>{{(form.name).upper()}}</title>
+  <link rel="shortcut icon" href="../static/img/brockhampton.ico"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css"/>
+  <link href="static/css/parallax.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body>
+
+  {% if user %}
+  <div class="fixed-action-btn">
+    <a class="btn-floating waves-light btn-large red lighten-2" title="LOGOUT" href='/logout'>
+      <i class="large material-icons">input</i>
+    </a>
+  </div>
+  {% endif %}
+
+{% if form.owner != user %}
+
+{% set qustionNumber = 1 %}
+
+<div class="container">
+  <div class="section">
+    <div class="col s10">
+      <h6 class="center"><a class="grey-text" href="mailto:{{user.email}}">{{user.email.upper()}}</a></h6><br><br><br>
+      <h2><a class="grey-text lighten-1"></a>{{(form.name).upper()}}</h2>
+    </div>
+  </div>
+
+  <div class="col s10 center-align">
+    <iframe class="center" name="iframe" id="iframe" frameBorder="0" src="/take/{{form.id}}/{{(form.questions[0]).id}}" width="1000" height="500"></iframe>
+  </div>
+  <div class="row s10 center"><br><br><br>
+      <a id="prev" style="visibility: hidden" class="btn waves-effect waves-light cyan">PREVIOUS</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <a id="next" class="btn waves-effect waves-light cyan">&nbsp;&nbsp;&nbsp;&nbsp;NEXT&nbsp;&nbsp;&nbsp;&nbsp;</a>
+  </div>
+
+  <div class="row s10 right">
+    <br><br><br>
+    <a class="btn-large waves-effect waves-light cyan" href="/dash">SUBMIT</a>
+  </div>
+
+  <div class="row s10" style="visibility: hidden">
+      <select id="questions" class="browser-default" onchange="document.getElementById('iframe').src = window.location.origin.toString() + '/take/{{form.id}}/' + this.options[this.selectedIndex].value">
+          <option value="" disabled>SELECT QUESTION</option>
+          <option value="{{(form.questions[0]).id}}" selected>1</option>
+          {% for n in range((form.questions|length)-1) %}
+          <option value="{{(form.questions[n+1]).id}}">{{n+2}}</option>
+          {% endfor %}
+      </select>
+  </div>
+
+</div>
+
+
+{% else %}
+  <script>
+    window.location.replace("/view/{{form.id}}");
+  </script>
+{% endif %}
+
+<footer>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+  <script src="static/js/parallax.min.js"></script>
+  <script>
+    (function($){
+      $(document).ready(function(){
+        $('select').formSelect();
+      });
+    })(jQuery);
+
+    $("#next").click(function() {
+      var nextElement = $('#questions > option:selected').next('option');
+      if (nextElement.length > 0) {
+        $('#questions > option:selected').removeAttr('selected').next('option').attr('selected', 'selected');
+        $('#iframe').prop('src', window.location.origin.toString() + '/take/{{form.id}}/' + ($('#questions :selected').val()).toString())
+        var sel = parseInt($('#questions :selected').text());
+        if(sel == {{form.questions|length}}) {
+          $("#next").css("visibility", "hidden");
+        } else {
+          $("#prev").css("visibility", "visible");
+          $("#next").css("visibility", "visible");
+        }
+      }
+    });
+
+    $("#prev").click(function() {
+      var nextElement = $('#questions > option:selected').prev('option');
+      var disabled = nextElement.is(':disabled')
+      if (nextElement.length > 0 && !disabled ) {
+        $('#questions > option:selected').removeAttr('selected').prev('option').attr('selected', 'selected');
+        $('#iframe').prop('src', window.location.origin.toString() + '/take/{{form.id}}/' + ($('#questions :selected').val()).toString())
+        var sel = parseInt($('#questions :selected').text());
+        if(sel == 1){
+          $("#prev").css("visibility", "hidden");
+        } else {
+          $("#prev").css("visibility", "visible");
+          $("#next").css("visibility", "visible");
+        }
+      }
+    });
+  </script>
+</footer>
+</body>
+</html>

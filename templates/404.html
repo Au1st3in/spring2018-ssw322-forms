@@ -1,17 +1,32 @@
-{% extends 'base.html' %}
-{% block content %}
-
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+  <title>BROCKHAMPTON FORMS</title>
+  <link rel="shortcut icon" href="static/img/brockhampton.ico"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css"/>
+  <link href="static/css/parallax.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body onclick="redirect();">
 <div class="row s12"><br><br><br><br><br><br><br><br><br><br></div>
 <div class="row s12">
   <div class="col s3"></div>
   <div class="col s3"><h1 class="grey-text text-darken-1">404</h1><h3 class="grey-text"><br>IMMA LET YOU FINISH,<br>BUT THE PAGE YOUR LOOKING FOR<br>CAN'T BE FOUND</h3></div>
-  <div class="col s4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{url}}"></div>
+  <div class="col s4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../../static/img/kanye.png"></div>
 </div>
-<div class="row s12 center">
-  <div class="col s4 center"></div>
-  <div class="col s1 center">
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn-large waves-effect waves-light grey darken-1" href="/dash"><i class="material-icons">arrow_back</i></a>
-  </div>
-</div>
-
-{% endblock %}
+<footer>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+  <script src="static/js/parallax.min.js"></script>
+  <script>
+    function redirect(){
+      location.href = window.location.origin.toString();
+    }
+  </script>
+</footer>
+</body>
+</html>

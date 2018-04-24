@@ -97,7 +97,11 @@
       {% if isTest %}
         <input id="me{{n+1}}" name="me{{n+1}}" type="text" class="validate" value="{{q.order[1][n]}}">
       {% else %}
-        <input id="me{{n+1}}" name="me{{n+1}}" type="text" class="validate" value="{{q.order[1][n]}}" required>
+        {% if n == 0 %}
+          <input id="me1" name="me1" type="text" class="validate" value="{{q.order[1][0]}}" required>
+        {% else %}
+          <input id="me{{n+1}}" name="me{{n+1}}" type="text" class="validate" value="{{q.order[1][n]}}">
+        {% endif %}
       {% endif %}
       <label for="me{{n+1}}" data-error="wrong" data-success="right">MATCHEE {{n+1}}</label>
     </div>

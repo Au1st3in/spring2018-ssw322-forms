@@ -87,6 +87,8 @@ def publish(state):
     user = logged_in()
     if user:
         f = models.form(state)
+        if not f.published and len(f.questions) <= 0:
+            return redirect('/dash')
         f.published = not f.published
         f.save()
         return redirect('/dash')
@@ -112,10 +114,6 @@ def remove(state):
         return redirect('/dash')
     return redirect('/')
 
-
-
-
-
 @app.route('/view/<state>')
 def view(state):
     """ Displays Form Questions and Answers """
@@ -127,6 +125,12 @@ def view(state):
         return redirect('/take/'+state)
     return redirect('/dash')
 
+
+
+
+
+
+
 @app.route('/take/<state>')
 def take(state):
     """  """
@@ -136,10 +140,18 @@ def take(state):
         if(f.owner==user):
             return redirect('/view/'+state)
         elif(f.published):
-            return render_template('take.html', user=user, form=f)
+            if user:
+                return render_template('take.html', user=user, form=f)
+            return redirect('/')
         return render_template('unpublished.html', user=user, isTest=f.isTest)
     else:
         return render_template('unpublished.html', user=user, isTest=None)
+
+
+
+
+
+
 
 @app.route('/modify/<formType>/temp')
 def modify_iframe(formType):
@@ -252,14 +264,6 @@ def modify_question(formType, questionID):
             return render_template('modify/'+str(q.questionType)+'.html', user=user, questionNumber=qNumber, isTest=form.isTest, q=q, a=a)
     return redirect('/')
 
-
-
-
-
-
-
-
-
 @app.route('/create/<formType>/temp')
 def create_iframe(formType):
     """  """
@@ -357,7 +361,7 @@ def add_question(formType, questionType, formID):
 @app.errorhandler(404)
 def page_not_found(e):
     ''' Page Not Found Redirect '''
-    return render_template('404.html', url=url_for('static',filename='kanye.png')), 404
+    return render_template('404.html'), 404
 
 if __name__ == "__main__":
     app.run()
