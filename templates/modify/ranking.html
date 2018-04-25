@@ -13,7 +13,7 @@
 <script>
   function add_fields() {
       var ranks = (document.forms["form"].getElementsByTagName('input')).length-2;
-      document.getElementById('wrapper').innerHTML += '\n<div class="input-field col s4"><input id="r'+ranks+'" name="r'+ranks+'" type="text" class="validate" required><label for="r'+ranks+'" data-error="wrong" data-success="right">RANK '+ranks+'</label></div>\r\n';
+      document.getElementById('wrapper').innerHTML += '\n<div class="input-field col s4"><input onchange="this.setAttribute(\'value\',this.value);" id="r'+ranks+'" name="r'+ranks+'" type="text" class="validate" required><label for="r'+ranks+'" data-error="wrong" data-success="right">RANK '+ranks+'</label></div>\r\n';
       document.getElementById('ranks').value=ranks.toString();
   }
 </script>
@@ -25,7 +25,7 @@
 <script>
   function add_fields() {
       var ranks = (document.forms["form"].getElementsByTagName('input')).length-1;
-      document.getElementById('wrapper').innerHTML += '\n<div class="input-field col s4"><input id="r'+ranks+'" name="r'+ranks+'" type="text" class="validate" required><label for="r'+ranks+'" data-error="wrong" data-success="right">OPTION '+ranks+'</label></div>\r\n';
+      document.getElementById('wrapper').innerHTML += '\n<div class="input-field col s4"><input onchange="this.setAttribute(\'value\',this.value);" id="r'+ranks+'" name="r'+ranks+'" type="text" class="validate" required><label for="r'+ranks+'" data-error="wrong" data-success="right">OPTION '+ranks+'</label></div>\r\n';
       document.getElementById('ranks').value=ranks.toString();
   }
 </script>
@@ -38,9 +38,9 @@
     {% for n in range(q.order|length) %}
       <div class="input-field col s4">
         {% if isTest %}
-          <input id="r{{n+1}}" name="r{{n+1}}" type="text" class="validate" value="{{a.answer[n]}}" required>
+          <input id="r{{n+1}}" name="r{{n+1}}" type="text" class="validate" value="{{a.answer[n]}}" onchange="this.setAttribute('value',this.value);" required>
         {% else %}
-          <input id="r{{n+1}}" name="r{{n+1}}" type="text" class="validate" value="{{q.order[n]}}" required>
+          <input id="r{{n+1}}" name="r{{n+1}}" type="text" class="validate" value="{{q.order[n]}}" onchange="this.setAttribute('value',this.value);" required>
         {% endif %}
         {% if isTest %}
           <label for="r{{n+1}}" data-error="wrong" data-success="right">RANK {{n+1}}</label>

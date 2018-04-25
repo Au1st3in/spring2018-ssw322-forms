@@ -147,8 +147,38 @@ def take(state):
     else:
         return render_template('unpublished.html', user=user, isTest=None)
 
-
-
+@app.route('/take/<formID>/<questionID>', methods=['GET', 'POST'])
+def take_question(formID, questionID):
+    """  """
+    user = logged_in()
+    f = models.form(formID)
+    q = models.question(questionID)
+    if user and f and f.published and user != f.owner and q and f == q.form:
+        
+        index = None
+        qNumber = f.questions.index(q) + 1
+        for n in range(0, len(f.userAnswers)):
+            if f.userAnswers[n][0].owner == user:
+                index = n
+                break
+        if index == None:
+            index = len(f.userAnswers)
+        
+        a = None
+        if len(f.userAnswers) > index and len(f.userAnswers[index]) >= qNumber and f.userAnswers[index][qNumber-1].question == q:
+            a =  f.userAnswers[index][qNumber-1]
+            
+        isPOST = False
+        if request.method == 'POST':
+            isPOST = True
+            #if q.questionType == 'essay':
+        if len(f.userAnswers) > index and not q in f.userAnswers[index]:
+            f.userAnswers[index].insert(qNumber-1, q)
+        f.save()
+        if a:
+            a.save()
+        return render_template('take/'+q.questionType+'.html', user=user, isTest=f.isTest, isPOST=isPOST, questions=len(f.questions), questionNumber=qNumber, question=q, answer=a)
+    return page_not_found(404)
 
 
 

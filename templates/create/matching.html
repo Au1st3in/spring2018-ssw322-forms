@@ -13,7 +13,7 @@
 <script>
   function add_fields() {
       var matches = (((document.forms["form"].getElementsByTagName('input')).length-3)/2)+1;
-      document.getElementById('wrapper').innerHTML += '<div class="row s12"><div class="input-field col s4"><input id="mr'+matches+'" name="mr'+matches+'" type="text" class="validate" required><label for="mr'+matches+'" data-error="wrong" data-success="right">MATCHER '+matches+'</label></div><div class="input-field col s2"><select class="browser-default" id="answer'+matches+'" name="answer'+matches+'" onchange="validate_matchee();" required><option value="" disabled selected> ⟹ </option><option value="('+matches+',1)">MATCHEE 1</option></select></div><div class="col s2"></div><div class="input-field col s4"><input id="me'+matches+'" name="me'+matches+'" type="text" class="validate"><label for="me'+matches+'" data-error="wrong" data-success="right">MATCHEE '+matches+'</label></div></div>';
+      document.getElementById('wrapper').innerHTML += '<div class="row s12"><div class="input-field col s4"><input onchange="this.setAttribute(\'value\',this.value);" id="mr'+matches+'" name="mr'+matches+'" type="text" class="validate" required><label for="mr'+matches+'" data-error="wrong" data-success="right">MATCHER '+matches+'</label></div><div class="input-field col s2"><select class="browser-default" id="answer'+matches+'" name="answer'+matches+'" onchange="validate_matchee();" required><option value="" disabled selected> ⟹ </option><option value="('+matches+',1)">MATCHEE 1</option></select></div><div class="col s2"></div><div class="input-field col s4"><input onchange="this.setAttribute(\'value\',this.value);" id="me'+matches+'" name="me'+matches+'" type="text" class="validate"><label for="me'+matches+'" data-error="wrong" data-success="right">MATCHEE '+matches+'</label></div></div>';
       for(var i = 1; i <= matches; i++){
         for(var z = 1; z <= matches; z++){
           document.getElementById('answer'+i).innerHTML +=  '\n<option value="('+i+','+z+')">MATCHEE '+z+'</option>'
@@ -56,7 +56,7 @@
 <script>
   function add_fields() {
       var matches = (((document.forms["form"].getElementsByTagName('input')).length-2)/2)+1;
-      document.getElementById('wrapper').innerHTML += '<div class="row s12"><div class="col s1"></div><div class="input-field col s4"><input id="mr'+matches+'" name="mr'+matches+'" type="text" class="validate" required><label for="mr'+matches+'" data-error="wrong" data-success="right">MATCHER '+matches+'</label></div><div class="col s2"></div><div class="input-field col s4"><input id="me'+matches+'" name="me'+matches+'" type="text" class="validate"><label for="me'+matches+'" data-error="wrong" data-success="right">MATCHEE '+matches+'</label></div></div>';
+      document.getElementById('wrapper').innerHTML += '<div class="row s12"><div class="col s1"></div><div class="input-field col s4"><input onchange="this.setAttribute(\'value\',this.value);" id="mr'+matches+'" name="mr'+matches+'" type="text" class="validate" required><label for="mr'+matches+'" data-error="wrong" data-success="right">MATCHER '+matches+'</label></div><div class="col s2"></div><div class="input-field col s4"><input onchange="this.setAttribute(\'value\',this.value);" id="me'+matches+'" name="me'+matches+'" type="text" class="validate"><label for="me'+matches+'" data-error="wrong" data-success="right">MATCHEE '+matches+'</label></div></div>';
       document.getElementById('matches').value=matches.toString();
   }
 </script>
@@ -71,7 +71,7 @@
     {% endif %}
 
     <div class="input-field col s4">
-      <input id="mr1" name="mr1" type="text" class="validate" required>
+      <input id="mr1" name="mr1" type="text" class="validate" onchange="this.setAttribute('value',this.value);" required>
       <label for="mr1" data-error="wrong" data-success="right">MATCHER 1</label>
     </div>
 
@@ -87,9 +87,9 @@
 
     <div class="input-field col s4">
       {% if isTest %}
-        <input id="me1" name="me1" type="text" class="validate">
+        <input id="me1" name="me1" type="text" class="validate" onchange="this.setAttribute('value',this.value);">
       {% else %}
-        <input id="me1" name="me1" type="text" class="validate" required>
+        <input id="me1" name="me1" type="text" class="validate" onchange="this.setAttribute('value',this.value);" required>
       {% endif %}
       <label for="me1" data-error="wrong" data-success="right">MATCHEE 1</label>
     </div>
@@ -101,21 +101,21 @@
 <div class="row s12">
   <div class="col s1"></div>
   <div class="input-field col s4">
-    <input id="mr'+matches+'" name="mr'+matches+'" type="text" class="validate" required>
+    <input onchange="this.setAttribute(\'value\',this.value);" id="mr'+matches+'" name="mr'+matches+'" type="text" class="validate" required>
     <label for="mr'+matches+'" data-error="wrong" data-success="right">MATCHER '+matches+'</label>
   </div>
 
   <div class="col s2"></div>
 
   <div class="input-field col s4">
-    <input id="me'+matches+'" name="me'+matches+'" type="text" class="validate">
+    <input onchange="this.setAttribute(\'value\',this.value);" id="me'+matches+'" name="me'+matches+'" type="text" class="validate">
     <label for="me'+matches+'" data-error="wrong" data-success="right">MATCHEE '+matches+'</label>
   </div>
 </div>
 
 <div class="row s12">
   <div class="input-field col s4">
-    <input id="mr'+matches+'" name="mr'+matches+'" type="text" class="validate" required>
+    <input onchange="this.setAttribute(\'value\',this.value);" id="mr'+matches+'" name="mr'+matches+'" type="text" class="validate" required>
     <label for="mr'+matches+'" data-error="wrong" data-success="right">MATCHER '+matches+'</label>
   </div>
 
@@ -128,7 +128,7 @@
   <div class="col s2"></div>
 
   <div class="input-field col s4">
-    <input id="me'+matches+'" name="me'+matches+'" type="text" class="validate">
+    <input onchange="this.setAttribute(\'value\',this.value);" id="me'+matches+'" name="me'+matches+'" type="text" class="validate">
     <label for="me'+matches+'" data-error="wrong" data-success="right">MATCHEE '+matches+'</label>
   </div>
 </div>

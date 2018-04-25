@@ -36,7 +36,11 @@
           </div>
           {% if form.isTest %}
             <div class="col s3">
+              {% if (form.questions[n]).points == 1 %}
+              <h5 class="grey-text center">1 POINT </h5>
+              {% else %}
               <h5 class="grey-text center">{{(form.questions[n]).points}} POINTS</h5>
+              {% endif %}
             </div>
             {% if total_points.append(total_points.pop() + (form.questions[n]).points) %}{% endif %}
           {% endif %}

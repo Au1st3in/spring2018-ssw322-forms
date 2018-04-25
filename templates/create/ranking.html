@@ -13,7 +13,7 @@
 <script>
   function add_fields() {
       var ranks = (document.forms["form"].getElementsByTagName('input')).length-2;
-      document.getElementById('wrapper').innerHTML += '\n<div class="input-field col s4"><input id="r'+ranks+'" name="r'+ranks+'" type="text" class="validate" required><label for="r'+ranks+'" data-error="wrong" data-success="right">RANK '+ranks+'</label></div>\r\n';
+      document.getElementById('wrapper').innerHTML += '\n<div class="input-field col s4"><input onchange="this.setAttribute(\'value\',this.value);" id="r'+ranks+'" name="r'+ranks+'" type="text" class="validate" required><label for="r'+ranks+'" data-error="wrong" data-success="right">RANK '+ranks+'</label></div>\r\n';
       document.getElementById('ranks').value=ranks.toString();
   }
 </script>
@@ -25,7 +25,7 @@
 <script>
   function add_fields() {
       var ranks = (document.forms["form"].getElementsByTagName('input')).length-1;
-      document.getElementById('wrapper').innerHTML += '\n<div class="input-field col s4"><input id="r'+ranks+'" name="r'+ranks+'" type="text" class="validate" required><label for="r'+ranks+'" data-error="wrong" data-success="right">OPTION '+ranks+'</label></div>\r\n';
+      document.getElementById('wrapper').innerHTML += '\n<div class="input-field col s4"><input onchange="this.setAttribute(\'value\',this.value);" id="r'+ranks+'" name="r'+ranks+'" type="text" class="validate" required><label for="r'+ranks+'" data-error="wrong" data-success="right">OPTION '+ranks+'</label></div>\r\n';
       document.getElementById('ranks').value=ranks.toString();
   }
 </script>
@@ -35,7 +35,7 @@
     <div class="col s2"><br></div>
     <input id="ranks" name="ranks" type="hidden" value="2" required>
     <div class="input-field col s4">
-      <input id="r1" name="r1" type="text" class="validate" required>
+      <input id="r1" name="r1" type="text" class="validate" onchange="this.setAttribute('value',this.value);" required>
       {% if isTest %}
         <label for="r1" data-error="wrong" data-success="right">RANK 1</label>
       {% else %}
@@ -43,7 +43,7 @@
       {% endif %}
     </div>
     <div class="input-field col s4">
-      <input id="r2" name="r2" type="text" class="validate" required>
+      <input id="r2" name="r2" type="text" class="validate" onchange="this.setAttribute('value',this.value);" required>
       {% if isTest %}
         <label for="r2" data-error="wrong" data-success="right">RANK 2</label>
       {% else %}

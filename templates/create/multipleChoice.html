@@ -23,7 +23,7 @@
 <script>
   function add_fields() {
       var choices = (document.forms["form"].getElementsByTagName('input')).length-2;
-      document.getElementById('wrapper').innerHTML += '\n<div class="input-field col s4"><input id="c'+choices+'" name="c'+choices+'" type="text" class="validate" required><label for="c'+choices+'" data-error="wrong" data-success="right">CHOICE '+choices+'</label></div>\r\n';
+      document.getElementById('wrapper').innerHTML += '\n<div class="input-field col s4"><input onchange="this.setAttribute(\'value\',this.value);" id="c'+choices+'" name="c'+choices+'" type="text" class="validate" required><label for="c'+choices+'" data-error="wrong" data-success="right">CHOICE '+choices+'</label></div>\r\n';
       document.getElementById('choices').value=choices.toString();
       document.getElementById('answer').innerHTML += '<option value="'+choices+'">CHOICE '+choices+'</option>';
   }
@@ -37,7 +37,7 @@
 <script>
   function add_fields() {
       var choices = (document.forms["form"].getElementsByTagName('input')).length-1;
-      document.getElementById('wrapper').innerHTML += '\n<div class="input-field col s4"><input id="c'+choices+'" name="c'+choices+'" type="text" class="validate" required><label for="c'+choices+'" data-error="wrong" data-success="right">CHOICE '+choices+'</label></div>\r\n';
+      document.getElementById('wrapper').innerHTML += '\n<div class="input-field col s4"><input onchange="this.setAttribute(\'value\',this.value);" id="c'+choices+'" name="c'+choices+'" type="text" class="validate" required><label for="c'+choices+'" data-error="wrong" data-success="right">CHOICE '+choices+'</label></div>\r\n';
       document.getElementById('choices').value=choices.toString();
       document.getElementById('answer').innerHTML += '<option value="'+choices+'">CHOICE '+choices+'</option>';
   }
@@ -49,11 +49,11 @@
     <div class="col s2"><br></div>
     <input id="choices" name="choices" type="hidden" value="2" required>
     <div class="input-field col s4">
-      <input id="c1" name="c1" type="text" class="validate" required>
+      <input id="c1" name="c1" type="text" class="validate" onchange="this.setAttribute('value',this.value);" required>
       <label for="c1" data-error="wrong" data-success="right">CHOICE 1</label>
     </div>
     <div class="input-field col s4">
-      <input id="c2" name="c2" type="text" class="validate" required>
+      <input id="c2" name="c2" type="text" class="validate" onchange="this.setAttribute('value',this.value);" required>
       <label for="c2" data-error="wrong" data-success="right">CHOICE 2</label>
     </div>
 </div>
