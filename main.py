@@ -107,9 +107,8 @@ def remove(state):
                 qF.delete()
             for caF in f.correctAnswers:
                 caF.delete()
-            for uaF in f.userAnswers:
-                for uA in uaF:
-                    uA.delete()
+            for uA in f.userAnswers:
+                uA.delete()
             f.delete()
         return redirect('/dash')
     return redirect('/')
@@ -120,16 +119,28 @@ def view(state):
     user = logged_in()
     f = models.form(state)
     if f:
-        if(f.owner==user):
-            return render_template('view.html', user=user, form=f)
-        return redirect('/take/'+state)
+        if f.published:
+            if(f.owner==user):
+                return render_template('view.html', user=user, form=f, isTest=f.isTest)
+            return redirect('/take/'+state)
+        return render_template('unpublished.html', user=user, isTest=f.isTest)
     return redirect('/dash')
 
-
-
-
-
-
+@app.route('/view/<state>/<userID>')
+def view_submission(state, userID):
+    user = models.user(userID)
+    f = models.form(state)
+    if f and f.published:
+        if(f.owner!=user):
+            userAnswer = []
+            for n in range(0, len(f.questions)):
+                for a in f.userAnswers:
+                    if a.owner == user and a.question == f.questions[n]:
+                        userAnswer.append(a)
+            if(len(userAnswer) == len(f.questions)):
+                f.correctAnswers = list(userAnswer)
+                return render_template('view.html', user=user, form=f, isTest=True)
+    view(state)
 
 @app.route('/take/<state>')
 def take(state):
@@ -153,35 +164,53 @@ def take_question(formID, questionID):
     user = logged_in()
     f = models.form(formID)
     q = models.question(questionID)
+    
     if user and f and f.published and user != f.owner and q and f == q.form:
         
-        index = None
-        qNumber = f.questions.index(q) + 1
-        for n in range(0, len(f.userAnswers)):
-            if f.userAnswers[n][0].owner == user:
-                index = n
-                break
-        if index == None:
-            index = len(f.userAnswers)
-        
         a = None
-        if len(f.userAnswers) > index and len(f.userAnswers[index]) >= qNumber and f.userAnswers[index][qNumber-1].question == q:
-            a =  f.userAnswers[index][qNumber-1]
-            
+        for n in range(0, len(f.userAnswers)):
+            if f.userAnswers[n].owner == user and f.userAnswers[n].question == q:
+                a = f.userAnswers[n]
+                break
+
         isPOST = False
         if request.method == 'POST':
             isPOST = True
-            #if q.questionType == 'essay':
-        if len(f.userAnswers) > index and not q in f.userAnswers[index]:
-            f.userAnswers[index].insert(qNumber-1, q)
-        f.save()
-        if a:
+            if q.questionType in {'shortAnswer', 'essay', 'trueFalse', 'multipleChoice'}:
+                if a:
+                    a.answer = str(request.form['response']).strip()
+                else:
+                    a = models.Answer(owner=user, question=q, answer=str(request.form['response']).strip())
+            elif q.questionType == 'matching':
+                answer = {}
+                for m in q.order[0]:
+                    answer[m] = []
+                for n in range(1, len(q.order[0])+1):
+                    answer[(q.order[0][int(request.form['response'+str(n)][1])-1])].append(q.order[1][int(request.form['response'+str(n)][3])-1])    
+                if a:
+                    a.answer = str(answer)
+                else:
+                    a = models.Answer(owner=user, question=q, answer=str(answer))
+            elif q.questionType == 'ranking':
+                order = []
+                for r in range(1, len(q.order)+1):
+                    order.insert(int(request.form['r'+str(r)])-1, q.order[r-1])
+                if a:
+                    a.answer = str(order)
+                else:
+                    a = models.Answer(owner=user, question=q, answer=str(order))        
+        
+        if a != None:
             a.save()
-        return render_template('take/'+q.questionType+'.html', user=user, isTest=f.isTest, isPOST=isPOST, questions=len(f.questions), questionNumber=qNumber, question=q, answer=a)
+            if not a in f.userAnswers:
+                f.userAnswers.append(a)
+            a = a.answer
+            if q.questionType in {'matching', 'ranking'}:
+                a = ast.literal_eval(a)
+        f.save()
+        
+        return render_template('take/'+q.questionType+'.html', user=user, isTest=f.isTest, isPOST=isPOST, questions=len(f.questions), questionNumber=f.questions.index(q)+1, question=q, answer=a)
     return page_not_found(404)
-
-
-
 
 @app.route('/modify/<formType>/temp')
 def modify_iframe(formType):
@@ -198,9 +227,8 @@ def modify(state):
     f = models.form(state)
     if f:
         if(f.owner==user):
-            for uaF in f.userAnswers:
-                for uA in uaF:
-                    uA.delete()
+            for uA in f.userAnswers:
+                uA.delete()
             f.userAnswers = []
             f.save()
             return render_template('modify.html', user=user, form=f)

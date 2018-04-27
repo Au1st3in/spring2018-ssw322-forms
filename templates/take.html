@@ -25,23 +25,22 @@
   <div class="section">
     <div class="col s10">
       <h6 class="center"><a class="grey-text" href="mailto:{{user.email}}">{{user.email.upper()}}</a></h6><br><br><br>
-      <h2><a class="grey-text lighten-1"></a>{{(form.name).upper()}}</h2>
+      <h2><a class="grey-text text-darken-2"></a>{{(form.name).upper()}}</h2>
     </div>
   </div>
 
-  <div class="col s10 center-align">
-    <iframe class="center" name="iframe" id="iframe" frameBorder="0" src="/take/{{form.id}}/{{(form.questions[0]).id}}" width="1000" height="500"></iframe>
+  <div class="col s10 center-align"><br><br>
+    <iframe class="center" name="iframe" id="iframe" frameBorder="0" src="/take/{{form.id}}/{{(form.questions[0]).id}}" width="1000" height="600"></iframe>
   </div>
 
-  <div class="row s10 center"><br>
+  <div class="row s12 center">
       <a id="prev" style="visibility: hidden" class="btn waves-effect waves-light cyan">PREVIOUS</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       {% if form.questions|length > 1 %}
       <a id="next_button" onclick="iframe_submit();" class="btn waves-effect waves-light cyan">&nbsp;&nbsp;&nbsp;&nbsp;NEXT&nbsp;&nbsp;&nbsp;&nbsp;</a>
-      <button id="next" style="visibility: hidden" class="btn waves-effect waves-light cyan">NEXT</button>
       {% endif %}
   </div>
 
-  <div class="row s10 center">
+  <div class="row s12 center">
     {% if form.questions|length > 1 %}
     <a id="submit" style="visibility: hidden" onclick="iframe_submit();" class="btn waves-effect waves-light cyan">&nbsp;&nbsp;&nbsp;SUBMIT&nbsp;&nbsp;&nbsp;</a>
     {% else %}
@@ -49,7 +48,7 @@
     {% endif %}
   </div>
 
-  <div class="row s10" style="visibility: hidden">
+  <div class="row s12" style="visibility: hidden">
       <select id="questions" class="browser-default" onchange="document.getElementById('iframe').src = window.location.origin.toString() + '/take/{{form.id}}/' + this.options[this.selectedIndex].value">
           <option value="" disabled>SELECT QUESTION</option>
           <option value="{{(form.questions[0]).id}}" selected>1</option>
@@ -57,6 +56,9 @@
           <option value="{{(form.questions[n+1]).id}}">{{n+2}}</option>
           {% endfor %}
       </select>
+      {% if form.questions|length > 1 %}
+      <button id="next" class="btn waves-effect waves-light cyan">NEXT</button>
+      {% endif %}
   </div>
 
 </div>

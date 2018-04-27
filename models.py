@@ -22,7 +22,7 @@ class Form(mongoengine.Document):
     published = mongoengine.BooleanField(required=True, default=False)
     isTest = mongoengine.BooleanField(required=True)
     questions = mongoengine.ListField(mongoengine.ReferenceField('Question'), default=[])
-    userAnswers = mongoengine.ListField(mongoengine.ListField(mongoengine.ReferenceField('Answer')), default=[])
+    userAnswers = mongoengine.ListField(mongoengine.ReferenceField('Answer'), default=[])
     correctAnswers = mongoengine.ListField(mongoengine.ReferenceField('Answer'), default=[])
         
 class Question(mongoengine.Document):

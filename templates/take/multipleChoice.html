@@ -1,0 +1,34 @@
+{% extends 'take/base.html' %}
+{% block content %}
+
+{% set letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ' %}
+<div class="row s10">
+  <div class="col s3"></div>
+  <div class="col s3">
+    {% for n in range((question).choices|length) %}
+      <h6 class="grey-text">{{letters[n]}}. {{(((question).choices[n]).strip()).upper()}}</h6>
+    {% endfor %}
+  </div>
+  <div class="col s3 center">
+    <br>
+    <select class="browser-default" id="response" name="response" required>
+      {% if answer %}
+        <option value="" disabled>SELECT CHOICE</option>
+      {% else %}
+        <option value="" disabled selected>SELECT CHOICE</option>
+      {% endif %}
+
+      {% for n in range((question).choices|length) %}
+        {% if answer and answer == ((question).choices[n]).strip() %}
+          <option value="{{((question).choices[n]).strip()}}" selected>{{letters[n]}}. {{(((question).choices[n]).strip()).upper()}}</option>
+        {% else %}
+          <option value="{{((question).choices[n]).strip()}}">{{letters[n]}}. {{(((question).choices[n]).strip()).upper()}}</option>
+        {% endif %}
+      {% endfor %}
+    </select>
+  </div>
+</div>
+
+
+
+{% endblock %}

@@ -2,9 +2,13 @@
 {% block content %}
 
 <div class="row s10">
-  <div class="col s1"></div>
+  <div class="col s1"><br><br></div>
   <div class="input-field col s8">
-    <textarea value="" id="textarea" type="text" class="materialize-textarea" required></textarea>
+    {% if answer %}
+      <textarea id="response" name="response" type="text" class="materialize-textarea" required>{{answer}}</textarea>
+    {% else %}
+      <textarea id="response" name="response" type="text" class="materialize-textarea" required></textarea>
+    {% endif %}
     <label for="textarea">  ESSAY RESPONSE</label>
   </div>
 </div>

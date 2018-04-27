@@ -12,7 +12,7 @@
   <link href="static/css/parallax.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
 <body>
-{% if form.owner == user and form.questions|length > 0%}
+{% if form.questions|length > 0%}
   <div class="container">
     <div class="section">
       <div class="row s12">
@@ -24,6 +24,9 @@
         {% endif %}
       </div>
       <div class="row s12">
+        {% if form.isTest and user == form.owner %}
+        <h5 class="center grey-text text-darken-1">ANSWER SHEET</h5>
+        {% endif %}
         <h3 class="center grey-text text-darken-2">{{form.name.upper()}}</h3>
       </div>
       {% set total_points = [0] %}
@@ -49,7 +52,11 @@
           <div class="row s10">
             <div class="col s1"></div>
             <div class="input-field col s8">
-              <input value="" id="short" type="text" class="validate">
+              {% if isTest %}
+              <input value="{{(form.correctAnswers[n]).answer.upper()}}" id="short" type="text" class="validate" disabled>
+              {% else %}
+              <input value="" id="short" type="text" class="validate" disabled>
+              {% endif %}
               <label for="short">  SHORT ANSWER</label>
             </div>
           </div>
@@ -57,7 +64,11 @@
           <div class="row s10">
             <div class="col s1"></div>
             <div class="input-field col s8">
-              <textarea value="" id="textarea" type="text" class="materialize-textarea"></textarea>
+              {% if isTest %}
+              <textarea id="textarea" type="text" class="materialize-textarea" disabled>{{(form.correctAnswers[n]).answer.upper()}}</textarea>
+              {% else %}
+              <textarea value="" id="textarea" type="text" class="materialize-textarea" disabled></textarea>
+              {% endif %}
               <label for="textarea">  ESSAY</label>
             </div>
           </div>
@@ -65,7 +76,7 @@
         <div class="row s10">
           <div class="col s3"></div>
           <div class="col s3">
-            {% if form.isTest %}
+            {% if isTest %}
               {% if (form.correctAnswers[n]).answer.title() == 'True' %}
                 <p><label>
                   <input name="True" type="radio" checked disabled/>
@@ -102,7 +113,7 @@
             <div class="col s3"></div>
             <div class="col s3">
               {% for z in range((form.questions[n]).choices|length) %}
-                {% if form.isTest %}
+                {% if isTest %}
                     {% if (form.questions[n]).choices[z] == (form.correctAnswers[n]).answer %}
                       <h6 style="font-weight: bold;" class="grey-text text-darken-1">{{letters[z]}}. {{(((form.questions[n]).choices[z]).strip()).upper()}}</h6>
                     {% else %}
@@ -115,13 +126,13 @@
             </div>
           </div>
         {% elif (form.questions[n]).questionType == 'matching' %}
-          {% if form.isTest %}
+          {% if isTest %}
             <div class="row s10">
               <div class="col s3"></div>
               <div class="col s3 center">
                 {% for z in range(((form.questions[n]).order[0])|length) %}
                   {% set answer=(((form.correctAnswers[n]).answer).lstrip('{')).rstrip('}').split(', ') %}
-                  <h6 class="grey-text text-darken-1">{{(((form.questions[n]).order[0])[z]).upper()}}  ⇨  {{(((answer[z])[((answer[z]).find("'"+((((form.questions[n]).order[0])[z]).strip())+"': ["))+(((((form.questions[n]).order[0])[z]).strip())|length)+5:((answer[z]).find(']'))]).replace("'","")).upper().rstrip(']').lstrip('[')}}</h6>
+                  <h6 class="grey-text text-darken-1">{{(((form.questions[n]).order[0])[z]).upper()}}  ⇨  {{(((answer[z])[((answer[z]).find("'"+((((form.questions[n]).order[0])[z]).strip())+"': ["))+(((((form.questions[n]).order[0])[z]).strip())|length)+5:((answer[z]).find(']'))]).replace("'","")).upper().rstrip('"').lstrip('"').rstrip(':').lstrip(':').rstrip(']').lstrip('[').replace(']','').replace('[','')}}</h6>
                 {% endfor %}
               </div>
             </div>
@@ -152,7 +163,7 @@
             <div class="col s4"></div>
             <div class="col s3">
               {% for z in range(((form.questions[n]).order)|length) %}
-                {% if form.isTest %}
+                {% if isTest %}
                   <h6 class="grey-text text-darken-2">{{z+1}}.&nbsp;{{(((((((form.correctAnswers[n]).answer).split(','))[z].lstrip('[')).rstrip(']')).replace("'","")).strip()).upper()}}</h6>
                 {% else %}
                   <h6 class="grey-text">{{z+1}}.&nbsp;{{((((form.questions[n]).order)[z]).strip()).upper()}}</h6>
@@ -170,13 +181,9 @@
       </div>
     </div>
   </div>
-{% elif form.questions|length == 0 %}
-  <script>
-    window.location.replace("/modify/{{form.id}}");
-  </script>
 {% else %}
   <script>
-    window.location.replace("/dash");
+    window.location.replace("/modify/{{form.id}}");
   </script>
 {% endif %}
 <footer>

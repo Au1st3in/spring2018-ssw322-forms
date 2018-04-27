@@ -80,7 +80,7 @@
     {% if isTest %}
       <div class="input-field col s2">
         <select class="browser-default" id="answer{{n+1}}" name="answer{{n+1}}" onchange="validate_matchee();"> required>
-          <option value="" disabled> ⟹{{a.answer}} </option>
+          <option value="" disabled> ⟹ </option>
           {% for i in range(q.order[0]|length) %}
             {% if q.order[1][i] in a.answer[q.order[0][n]] %}
               <option value="({{n+1}},{{i+1}})" selected>MATCHEE {{i+1}}</option>

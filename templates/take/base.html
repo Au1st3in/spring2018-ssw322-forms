@@ -4,7 +4,7 @@
 </script>
 {% elif isPOST and questionNumber == questions%}
 <script>
-  parent.location.href = "/view/{{question.form.id}}/{{user.id}}"
+  parent.location.href = "/view/{{(question.form).id}}/{{user.id}}"
 </script>
 {% endif %}
 
@@ -27,7 +27,7 @@
       }
   </script>
 
-  <h4>QUESTION #{{questionNumber}}</h4>
+  <h4 class="grey-text text-darken-1">QUESTION #{{questionNumber}}</h4>
   <div class="col s1"><br><br></div>
 
   <div class="row">

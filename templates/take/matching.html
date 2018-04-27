@@ -1,0 +1,45 @@
+{% extends 'take/base.html' %}
+{% block content %}
+
+<div class="row s10">
+  {% for n in range(question.order[0]|length) %}
+  <div class="row s12">
+    <div class="col s1"></div>
+    <div class="input-field col s3">
+      <input name="mr{{n+1}}" type="text" value="{{question.order[0][n]}}" disabled>
+      <label for="mr{{n+1}}" data-error="wrong" data-success="right">MATCHER {{n+1}}</label>
+    </div>
+
+    <div class="input-field col s2">
+      <select class="browser-default" id="response{{n+1}}" name="response{{n+1}}" required>
+        {% if answer %}
+          <option value="" disabled> ⟹ </option>
+        {% else %}
+          <option value="" disabled selected> ⟹ </option>
+        {% endif %}
+        {% for i in range(question.order[0]|length) %}
+          {% if question.order[1][i] != '' %}
+            {% if answer and question.order[1][i] in answer[question.order[0][n]] %}
+              <option value="({{n+1}},{{i+1}})" selected>MATCHEE {{i+1}}</option>
+            {% else %}
+              <option value="({{n+1}},{{i+1}})">MATCHEE {{i+1}}</option>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="input-field col s3">
+      {% if question.order[1][n] != '' %}
+      <input name="me{{n+1}}" type="text" value="{{question.order[1][n]}}" disabled>
+      <label for="me{{n+1}}">MATCHEE {{n+1}}</label>
+      {% endif %}
+    </div>
+
+  </div>
+  {% endfor %}
+</div>
+
+
+
+{% endblock %}
