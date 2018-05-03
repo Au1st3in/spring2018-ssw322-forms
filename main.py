@@ -337,8 +337,6 @@ def create(formType):
     if user and formType.lower() in {'test', 'survey'}:
         form = None
         isTest = (formType.lower() == 'test')
-        print(formType)
-        print(isTest)
         if request.method == 'POST':
             form = models.Form(owner=user, published=False, isTest=isTest, name=request.form['text'].strip())
             form.save()
