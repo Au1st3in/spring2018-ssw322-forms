@@ -291,8 +291,8 @@ def modify_question(formType, questionID):
                     answer = {}
                     for m in order[0]:
                         answer[m] = []
-                    for a in  range(1, int(request.form['matches'])+1):
-                        answer[(order[0][int(request.form['answer'+str(a)][1])-1])].append(order[1][int(request.form['answer'+str(a)][3])-1])      
+                    for b in  range(1, int(request.form['matches'])+1):
+                        answer[(order[0][int(request.form['answer'+str(b)][1])-1])].append(order[1][int(request.form['answer'+str(b)][3])-1])      
                     
                     q.points = int(request.form['points'])
                     q.order=[random.sample(order[0], len(order[0])),random.sample(order[1], len(order[1]))]
